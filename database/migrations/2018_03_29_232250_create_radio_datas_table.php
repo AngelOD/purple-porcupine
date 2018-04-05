@@ -20,7 +20,7 @@ class CreateRadioDatasTable extends Migration
             $table->string('node_mac_address');
             $table->integer('packet_type');
             $table->integer('sequence_number');
-            $table->string('timestamp');
+            $table->bigint('timestamp_nano');
             $table->string('timestamp_tz');
             $table->integer('v_bat');
             $table->integer('vcc');

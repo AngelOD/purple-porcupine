@@ -21,7 +21,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 // Unprotected routes
 Route::namespace('Api')->group(function() {
-    //
+    Route::get('/rooms', 'RoomController@index');
+    Route::get('/rooms/{roomId}', 'RoomController@show');
+    Route::get('/rooms/{roomId}/{sensorType}', 'RoomController@showSensor');
 });
 
 // Protected routes

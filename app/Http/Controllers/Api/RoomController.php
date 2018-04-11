@@ -80,7 +80,7 @@ class RoomController extends Controller
                     "noise"=> 66,
                     "pressure"=> 101304,
                     "temperature"=> 23.22,
-                    "uv"=> 0,
+                    "uv"=> 3,
                     "voc"=> 2,
                 ], 200);
                 break;
@@ -130,7 +130,7 @@ class RoomController extends Controller
                 return response()->json([
                     "id"=>$id,
                     "type"=>"uv",
-                    "value"=>0,
+                    "value"=>3,
                 ], 200);
                 break;
             case 'voc':

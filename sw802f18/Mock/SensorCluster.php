@@ -10,7 +10,9 @@ class SensorCluster implements SensorClusterContract
     private $sensors = null;
 
     public function init()
-    {}
+    {
+        $this->update();
+    }
 
     public function getSensors()
     {}
@@ -22,7 +24,18 @@ class SensorCluster implements SensorClusterContract
     {}
 
     public function update()
-    {}
+    {
+        $this->sensors = [
+            new MockSensor([
+                'dataType' => 'double',
+                'maxValue' => 100.0,
+                'minValue' => 0.0,
+                'name' => 'temperature',
+                'unit' => '°C',
+                'value' => round((rand(500, 4000) / 100), 2),
+            ]),
+        ];
+    }
 
     protected function getSensorReadings()
     {}

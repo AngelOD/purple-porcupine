@@ -13,6 +13,11 @@ class MockSensor implements SensorContract
     private $unit = '°C';
     private $value = 22.43;
 
+    public function __construct($data)
+    {
+        $this->updateData($data);
+    }
+
     public function maxValue()
     {
         return $this->maxValue;

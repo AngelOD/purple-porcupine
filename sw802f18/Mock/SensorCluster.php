@@ -14,15 +14,29 @@ class SensorCluster implements SensorClusterContract
         $this->update();
     }
 
+    /**
+     * @param void
+     * @param array
+     * Get all the sensors and data as an associative array
+     */
     public function getSensors()
-    {}
+    {
+        return $this->sensors;
+    }
 
     public function getSensor($key)
-    {}
+    {
+        
+    }
 
     public function getSensorKeys()
     {}
 
+    /**
+     * @param void
+     * @return void
+     * Updates the sensors
+     */
     public function update()
     {
         $this->sensors = [
@@ -43,20 +57,20 @@ class SensorCluster implements SensorClusterContract
                 'value' => round((rand(1, 10000) / 100), 2),
             ]),
             new MockSensor([
-                'dataType' => 'double',
-                'maxValue' => 8192.0,
-                'minValue' => 400.0,
+                'dataType' => 'integer',
+                'maxValue' => 8192,
+                'minValue' => 400,
                 'name' => 'co2',
                 'unit' => 'ppm',
-                'value' => round((rand(40000, 819200) / 100), 2),
+                'value' => rand(400, 8192),
             ]),
             new MockSensor([
-                'dataType' => 'double',
-                'maxValue' => 1187.0,
-                'minValue' => 0.0,
+                'dataType' => 'integer',
+                'maxValue' => 1187,
+                'minValue' => 0,
                 'name' => 'voc',
                 'unit' => 'ppb',
-                'value' => round((rand(1, 118700) / 100), 2),
+                'value' => rand(1, 1187),
             ]),
             new MockSensor([
                 'dataType' => 'integer',
@@ -67,28 +81,28 @@ class SensorCluster implements SensorClusterContract
                 'value' => rand(0, 15),
             ]),
             new MockSensor([
-                'dataType' => 'double',
+                'dataType' => 'integer',
                 'maxValue' => 1000,
-                'minValue' => 0.008,
+                'minValue' => 0,
                 'name' => 'light',
                 'unit' => 'lux',
-                'value' => round((rand(8, 100000) / 100), 2),
+                'value' => rand(0, 1000),
             ]),
             new MockSensor([
-                'dataType' => 'double',
+                'dataType' => 'integer',
                 'maxValue' => 1200,
                 'minValue' => 300,
                 'name' => 'pressure',
                 'unit' => 'hPa',
-                'value' => round((rand(30000, 120000) / 100), 2),
+                'value' => rand(300, 1200),
             ]),
             new MockSensor([
-                'dataType' => 'double',
+                'dataType' => 'integer',
                 'maxValue' => 120,
                 'minValue' => 30,
                 'name' => 'noise',
                 'unit' => 'decibel',
-                'value' => round((rand(3000, 12000) / 100), 2),
+                'value' => rand(30, 120),
             ]),
         ];
     }

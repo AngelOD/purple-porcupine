@@ -9,7 +9,7 @@ interface SensorCluster
      *
      * @return void
      */
-    public function init();
+    public function init($nodeMacAddress);
 
     /**
      * Retrieve metadata as an associative array.

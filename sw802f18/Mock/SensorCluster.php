@@ -9,10 +9,12 @@ use Carbon\Carbon;
 class SensorCluster implements SensorClusterContract
 {
     private $metadata = [];
+    private $nodeMacAddress = null;
     private $sensors = [];
 
-    public function init()
+    public function init($nodeMacAddress)
     {
+        $this->nodeMacAddress = $nodeMacAddress;
         $this->update();
     }
 
@@ -49,7 +51,7 @@ class SensorCluster implements SensorClusterContract
         $this->metadata = [
             'valid' => true,
             'channel' => 0,
-            'nodeMacAddress' => '000000FF',
+            'nodeMacAddress' => $this->nodeMacAddress,
             'packetType' => 1,
             'radioBusID' => 3,
             'sequenceNumber' => rand(0, 10000),
@@ -57,73 +59,100 @@ class SensorCluster implements SensorClusterContract
         ];
 
         $this->sensors = [
-            'temperature' => new MockSensor([
-                'dataType' => 'double',
-                'maxValue' => 100.0,
-                'minValue' => 0.0,
-                'name' => 'temperature',
-                'unit' => '°C',
-                'value' => round((rand(500, 4000) / 100), 2),
-            ]),
-            'humidity' => new MockSensor([
-                'dataType' => 'double',
-                'maxValue' => 100.0,
-                'minValue' => 0.0,
-                'name' => 'humidity',
-                'unit' => '%',
-                'value' => round((rand(1, 10000) / 100), 2),
-            ]),
-            'co2' => new MockSensor([
-                'dataType' => 'integer',
-                'maxValue' => 8192,
-                'minValue' => 400,
-                'name' => 'co2',
-                'unit' => 'ppm',
-                'value' => rand(400, 8192),
-            ]),
-            'voc' => new MockSensor([
-                'dataType' => 'integer',
-                'maxValue' => 1187,
-                'minValue' => 0,
-                'name' => 'voc',
-                'unit' => 'ppb',
-                'value' => rand(1, 1187),
-            ]),
-            'uv' => new MockSensor([
-                'dataType' => 'integer',
-                'maxValue' => 15,
-                'minValue' => 0,
-                'name' => 'uv',
-                'unit' => 'index',
-                'value' => rand(0, 15),
-            ]),
-            'light' => new MockSensor([
-                'dataType' => 'integer',
-                'maxValue' => 1000,
-                'minValue' => 0,
-                'name' => 'light',
-                'unit' => 'lux',
-                'value' => rand(0, 1000),
-            ]),
-            'pressure' => new MockSensor([
-                'dataType' => 'integer',
-                'maxValue' => 1200,
-                'minValue' => 300,
-                'name' => 'pressure',
-                'unit' => 'hPa',
-                'value' => rand(300, 1200),
-            ]),
-            'noise' => new MockSensor([
-                'dataType' => 'integer',
-                'maxValue' => 120,
-                'minValue' => 30,
-                'name' => 'noise',
-                'unit' => 'decibel',
-                'value' => rand(30, 120),
-            ]),
+            'co2' => new MockSensor(
+                array_merge(
+                    config('sw802f18.sensorInfo.co2'),
+                    [
+                        'value' => rand(
+                            config('sw802f18.sensorInfo.co2.minValue'),
+                            config('sw802f18.sensorInfo.co2.maxValue')
+                        )
+                    ]
+                )
+            ),
+            'humidity' => new MockSensor(
+                array_merge(
+                    config('sw802f18.sensorInfo.humidity'),
+                    [
+                        'value' => round(
+                            rand(
+                                config('sw802f18.sensorInfo.humidity.minValue') * 100,
+                                config('sw802f18.sensorInfo.humidity.minValue') * 100
+                            ) / 100,
+                            2
+                        )
+                    ]
+                )
+            ),
+            'light' => new MockSensor(
+                array_merge(
+                    config('sw802f18.sensorInfo.light'),
+                    [
+                        'value' => rand(
+                            config('sw802f18.sensorInfo.light.minValue'),
+                            config('sw802f18.sensorInfo.light.maxValue')
+                        )
+                    ]
+                )
+            ),
+            'noise' => new MockSensor(
+                array_merge(
+                    config('sw802f18.sensorInfo.noise'),
+                    [
+                        'value' => rand(
+                            config('sw802f18.sensorInfo.noise.minValue'),
+                            config('sw802f18.sensorInfo.noise.maxValue')
+                        )
+                    ]
+                )
+            ),
+            'pressure' => new MockSensor(
+                array_merge(
+                    config('sw802f18.sensorInfo.pressure'),
+                    [
+                        'value' => rand(
+                            config('sw802f18.sensorInfo.pressure.minValue'),
+                            config('sw802f18.sensorInfo.pressure.maxValue')
+                        )
+                    ]
+                )
+            ),
+            'temperature' => new MockSensor(
+                array_merge(
+                    config('sw802f18.sensorInfo.temperature'),
+                    [
+                        'value' => round(
+                            rand(
+                                config('sw802f18.sensorInfo.temperature.minValue') * 100,
+                                config('sw802f18.sensorInfo.temperature.minValue') * 100
+                            ) / 100,
+                            2
+                        )
+                    ]
+                )
+            ),
+            'uv' => new MockSensor(
+                array_merge(
+                    config('sw802f18.sensorInfo.uv'),
+                    [
+                        'value' => rand(
+                            config('sw802f18.sensorInfo.uv.minValue'),
+                            config('sw802f18.sensorInfo.uv.maxValue')
+                        )
+                    ]
+                )
+            ),
+            'voc' => new MockSensor(
+                array_merge(
+                    config('sw802f18.sensorInfo.voc'),
+                    [
+                        'value' => rand(
+                            config('sw802f18.sensorInfo.voc.minValue'),
+                            config('sw802f18.sensorInfo.voc.maxValue')
+                        )
+                    ]
+                )
+            ),
         ];
     }
-
-    protected function getSensorReadings()
-    {}
 }

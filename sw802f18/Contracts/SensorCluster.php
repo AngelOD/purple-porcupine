@@ -9,7 +9,20 @@ interface SensorCluster
      *
      * @return void
      */
-    public function init();
+    public function init($nodeMacAddress);
+
+    /**
+     * Retrieve metadata as an associative array.
+     * Should have the keys:
+     *  - valid
+     *  - radioBusID
+     *  - channel
+     *  - nodeMacAddress
+     *  - packetType
+     *  - sequenceNumber
+     *  - timestamp
+     */
+    public function getMetadata();
 
     /**
      * Retrieve an associated list of sensors in the cluster.

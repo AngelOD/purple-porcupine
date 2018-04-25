@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Room;
 
 class RoomController extends Controller
 {
@@ -14,32 +15,20 @@ class RoomController extends Controller
      */
     public function index()
     {
-        return response()->json([
-                [
-                    "id" => "F6H7", 
-                    "name" => "0.2.12", 
-                    "altName" => "", 
-                    "score" => 243,
-                ],
-                [
-                    "id" => "YZZE", 
-                    "name" => "0.2.13", 
-                    "altName" => "", 
-                    "score" => 284,
-                ],
-                [
-                    "id" => "LAZC", 
-                    "name" => "0.2.90", 
-                    "altName" => "", 
-                    "score" => 634,
-                ],
-                [
-                    "id" => "2U2C", 
-                    "name" => "0.1.95", 
-                    "altName" => "Auditorie", 
-                    "score" => 1438,
-                ],
-        ], 200);
+        $data = [];
+
+        $rooms = Room::get();
+
+        foreach ($rooms as $room) {
+            $data[] = [
+                'id' => $room->internal_id,
+                'name' => $room->name,
+                'altName' => $room->alt_name,
+                'score' => rand(0, 2500),
+            ];
+        }
+
+        return response()->json($data, 200);
     }
 
     /**
@@ -51,16 +40,16 @@ class RoomController extends Controller
     public function show($id)
     {
         return response()->json([
-            "id" => $id, 
-            "name" => "0.2.12", 
-            "altName" => "", 
+            "id" => $id,
+            "name" => "0.2.12",
+            "altName" => "",
             "score" => 243,
         ], 200);
     }
 
     /**
      * Display the one or all sensors for a specific room. If $sensor = 'all' then all sensor data for a room will be returned.
-     * 
+     *
      * @param int $id
      * @param string $sensor
      * @return \Illuminiate\Http\Response
@@ -140,7 +129,7 @@ class RoomController extends Controller
                     "value"=>2,
                 ], 200);
                 break;
-            default: 
+            default:
                 return response()->json("No sensor found", 400);
         }
     }

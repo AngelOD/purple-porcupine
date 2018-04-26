@@ -18,6 +18,11 @@ class SensorCluster implements SensorClusterContract
         $this->update();
     }
 
+    public function getMetadata()
+    {
+        return $this->metadata;
+    }
+
     public function getSensors()
     {
         return $this->sensors;

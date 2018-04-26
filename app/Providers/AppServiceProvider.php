@@ -25,9 +25,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(SensorClusterContract::class, function($app){
+        $this->app->bind(SensorClusterContract::class, function($app, $vars){
             $sc = new SensorCluster();
-            $sc->init();
+            $sc->init($vars['nodeMacAddress']);
             return $sc;
         });
     }

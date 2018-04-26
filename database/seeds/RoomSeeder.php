@@ -3,12 +3,10 @@
 use App\Room;
 use App\SensorCluster;
 use Illuminate\Database\Seeder;
+use SW802F18\Helpers\RoomHelper;
 
 class RoomSeeder extends Seeder
 {
-    const CHARACTERS = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
-    private $usedRoomIDs = [];
-
     /**
      * Run the database seeds.
      *
@@ -18,7 +16,7 @@ class RoomSeeder extends Seeder
     {
         $rooms = [
             [
-                'id' => $this->getRandomRoomID(),
+                'id' => RoomHelper::getRandomRoomID(),
                 'name' => '0.2.12',
                 'altName' => '',
                 'scs' => [
@@ -26,7 +24,7 @@ class RoomSeeder extends Seeder
                 ],
             ],
             [
-                'id' => $this->getRandomRoomID(),
+                'id' => RoomHelper::getRandomRoomID(),
                 'name' => '0.2.90',
                 'altName' => '',
                 'scs' => [
@@ -34,7 +32,7 @@ class RoomSeeder extends Seeder
                 ],
             ],
             [
-                'id' => $this->getRandomRoomID(),
+                'id' => RoomHelper::getRandomRoomID(),
                 'name' => '0.1.95',
                 'altName' => 'Auditorium',
                 'scs' => [
@@ -44,7 +42,7 @@ class RoomSeeder extends Seeder
                 ],
             ],
             [
-                'id' => $this->getRandomRoomID(),
+                'id' => RoomHelper::getRandomRoomID(),
                 'name' => '2.2.56',
                 'altName' => '',
                 'scs' => [
@@ -76,21 +74,5 @@ class RoomSeeder extends Seeder
 
             $newRoom->save();
         }
-    }
-
-    protected function getRandomRoomID()
-    {
-        $id = '';
-
-        while (empty($id) || in_array($id, $this->usedRoomIDs)) {
-            $id = '';
-
-            for ($i = 0; $i < 4; $i++) {
-                $id .= substr(self::CHARACTERS, rand(0, strlen(self::CHARACTERS)), 1);
-            }
-        }
-
-        $this->usedRoomIDs[] = $id;
-        return $id;
     }
 }

@@ -24,7 +24,7 @@ class RoomController extends Controller
                 'id' => $room->internal_id,
                 'name' => $room->name,
                 'altName' => $room->alt_name,
-                'score' => rand(0, 2500),
+                'score' => rand(0, 1500),
             ];
         }
 
@@ -34,16 +34,20 @@ class RoomController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($roomID)
     {
+        $room = Room::where('internal_id', '=', strtoupper($roomID))->first();
+
+        if (empty($room)) { return response()->json('Invalid parameter data', 400); }
+
         return response()->json([
-            "id" => $id,
-            "name" => "0.2.12",
-            "altName" => "",
-            "score" => 243,
+            "id" => $room->internal_id,
+            "name" => $room->name,
+            "altName" => $room->alt_name,
+            "score" => rand(0, 1500),
         ], 200);
     }
 
@@ -56,8 +60,10 @@ class RoomController extends Controller
      */
     public function showSensor($id, $sensor = 'all')
     {
-        // Check if $sensor is 'all' then show all sensors.
-        //mock data
+        $room = Room::where('internal_id', '=', strtoupper($roomID))->first();
+
+        if (empty($room)) { return response()->json('Invalid parameter data', 400); }
+
         switch($sensor)
         {
             case 'all':

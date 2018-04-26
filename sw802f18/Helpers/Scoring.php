@@ -1,11 +1,12 @@
 <?php
-namespace SW802F18;
+namespace SW802F18\Helpers;
 use Carbon\Carbon;
+use SW802F18\Contracts\Scoring as IScoring;
 /**
  * This class has functions for calculating Classifications for sensors and a total score.
  * Most functions are actually more like classifiers.
  */
-class Scoring
+class Scoring implements IScoring
 {
     private $co2Classification, $temperatureClassification, 
     $vocClassification, $lightClassification, 
@@ -27,18 +28,16 @@ class Scoring
      */
     private function classification($parameter, array $low, array $up)
     {
-        $i = 0;
-        $maxClassification = 5;
-        while($i <= $maxClassification)
+        $maxClassification = 4;
+        for($i = 0; $i <= $maxClassification; $i++)
         {
-            if(($low[$i] <= $parameters) && ($parameters <= $up[$i]))
+            if(($low[$i] <= $parameter) && ($parameter <= $up[$i]))
             {
                 $i++;
                 return $i;
             }
-            $i++;
         }
-        return $maxClassification;
+        return $maxClassification++;
     }
 
     /**
@@ -100,8 +99,7 @@ class Scoring
     {
         $lower;
         $upper;
-        $ms = Carbon::createFromTimeStampMs($nanoTime / 1000);
-        $month = $ms->month;
+        $month = $nanoTime->month;
         if($month == 1 || $month == 2 || $month == 3 || $month == 4 || $month == 10 || $month == 11 || $month == 12) //Winter months
         {
             $lower = [0, 25, 35, 40, 45];
@@ -141,6 +139,7 @@ class Scoring
 
     /**
      * This function updates all the Classifications, instead of calling all the other functions individually. Convinience, I guess?
+     * Call this before totalScore() in order to get the most recent score result.
      * 
      * @param uv UV
      * @param light Light level
@@ -162,12 +161,24 @@ class Scoring
         $this->noiseClassification($noise);
     }
 
+    /**
+     * Calculates a total score based on classifications.
+     * 
+     * @return totalScore
+     */
     public function totalScore()
     {
-        return 0;
-        
+        $sound = $this->soundScore()*5;
+        $light = $this->lightScore()*3;
+        $iaq = $this->IAQScore()*6;
+        return $iaq + $light + $sound;
     }
 
+    /**
+     * Calculates a score for sound
+     * 
+     * @return totalScore
+     */
     private function soundScore()
     {
         $totalScore = 0;
@@ -234,7 +245,7 @@ class Scoring
         }
         if($classification == 2)
         {
-            $score = 80;
+            $score = 70;
         }
         return $score;
     }

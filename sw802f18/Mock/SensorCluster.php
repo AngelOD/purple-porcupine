@@ -12,7 +12,7 @@ class SensorCluster implements SensorClusterContract
     private $nodeMacAddress = null;
     private $sensors = [];
 
-    public function init($nodeMacAddress)
+    public function init($nodeMacAddress, $interval = null, $endTime = null)
     {
         $this->nodeMacAddress = $nodeMacAddress;
         $this->update();
@@ -46,6 +46,16 @@ class SensorCluster implements SensorClusterContract
         return array_keys($this->sensors);
     }
 
+    public function setEndTime(Carbon $time)
+    {
+        // TODO: Maybe work something in here?
+    }
+
+    public function setInterval($interval)
+    {
+        // TODO: Maybe work something in here?
+    }
+
     /**
      * @param void
      * @return void
@@ -55,12 +65,9 @@ class SensorCluster implements SensorClusterContract
     {
         $this->metadata = [
             'valid' => true,
-            'channel' => 0,
             'nodeMacAddress' => $this->nodeMacAddress,
-            'packetType' => 1,
-            'radioBusID' => 3,
-            'sequenceNumber' => rand(0, 10000),
-            'timestamp' => Carbon::now(),
+            'sequenceNumbers' => [rand(0, 10000)],
+            'timestamps' => [Carbon::now()],
         ];
 
         $this->sensors = [
@@ -82,7 +89,7 @@ class SensorCluster implements SensorClusterContract
                         'value' => round(
                             rand(
                                 config('sw802f18.sensorInfo.humidity.minValue') * 100,
-                                config('sw802f18.sensorInfo.humidity.minValue') * 100
+                                config('sw802f18.sensorInfo.humidity.maxValue') * 100
                             ) / 100,
                             2
                         )
@@ -129,7 +136,7 @@ class SensorCluster implements SensorClusterContract
                         'value' => round(
                             rand(
                                 config('sw802f18.sensorInfo.temperature.minValue') * 100,
-                                config('sw802f18.sensorInfo.temperature.minValue') * 100
+                                config('sw802f18.sensorInfo.temperature.maxValue') * 100
                             ) / 100,
                             2
                         )

@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use SW802F18\Contracts\SensorCluster as SensorClusterContract;
-use SW802F18\Mock\SensorCluster;
+use SW802F18\Database\SensorCluster;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

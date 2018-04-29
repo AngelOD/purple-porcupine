@@ -23,7 +23,7 @@ class Room extends Model
         $counters = [];
         $data = [];
 
-        if ($this->sensorClusters()->count() <= 1) {
+        if ($this->sensorClusters()->count() < 1) {
             return $this->sensorClusters()->first();
         }
 
@@ -36,10 +36,10 @@ class Room extends Model
 
             foreach ($sensors as $sensorType => $sensor) {
                 if (!array_key_exists($sensorType, $data)) {
-                    $data[$sensorType] = $sensor->getValue();
+                    $data[$sensorType] = $sensor->value();
                     $counters[$sensorType] = 1;
                 } else {
-                    $data[$sensorType] += $sensor->getValue();
+                    $data[$sensorType] += $sensor->value();
                     $counters[$sensorType]++;
                 }
             }

@@ -38,7 +38,6 @@ class RoomSeeder extends Seeder
                 'scs' => [
                     '00000069',
                     '000000D0',
-                    '000000F0',
                 ],
             ],
             [
@@ -47,6 +46,22 @@ class RoomSeeder extends Seeder
                 'altName' => '',
                 'scs' => [
                     '000000F2',
+                ],
+            ],
+            [
+                'id' => RoomHelper::getRandomRoomID(),
+                'name' => 'FRB7G-4-115',
+                'altName' => 'Grupperum',
+                'scs' => [
+                    '0000000A',
+                ],
+            ],
+            [
+                'id' => RoomHelper::getRandomRoomID(),
+                'name' => 'FRB7G-Somewhere',
+                'altName' => 'Flyderen',
+                'scs' => [
+                    '000000F0',
                 ],
             ],
         ];

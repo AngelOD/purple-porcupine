@@ -7,44 +7,56 @@ use SW802F18\Contracts\Sensor as SensorContract;
 class Sensor implements SensorContract
 {
     protected $data = null;
+    protected $sensorType = '';
+    protected $value = '';
 
-    public function __construct($name, $unit, $min, $max, $val)
+    public function __construct($sensorType, $value)
     {
-        $this->data = [
-            'maxValue'  => $max,
-            'minValue'  => $min,
-            'name'      => $name,
-            'unit'      => $unit,
-            'value'     => $value,
-        ];
+        $dataType = config("sw802f18.sensorInfo.${sensorType}.dataType");
+        $this->sensorType = $sensorType;
+
+        switch ($sensorType) {
+            case 'humidity':
+                $value /= 1000;
+            break;
+
+            case 'pressure':
+            case 'temperature':
+                $value /= 100;
+            break;
+        }
+
+        if ($dataType === 'integer') {
+            $value = (int)round($value, 0);
+        } elseif ($dataType === 'double') {
+            $value = (double)round($value, ($sensorType === 'humidity' ? 3 : 2));
+        }
+
+        $this->value = $value;
     }
 
     public function maxValue()
     {
-        return $this->getValue('maxValue');
+        return config('sw802f18.sensorInfo.' . $this->sensorType . '.maxValue');
     }
 
     public function minValue()
     {
-        return $this->getValue('minValue');
+        return config('sw802f18.sensorInfo.' . $this->sensorType . '.minValue');
     }
 
     public function name()
     {
-        return $this->getValue('name');
+        return config('sw802f18.sensorInfo.' . $this->sensorType . '.name');
     }
 
     public function unit()
     {
-        return $this->getValue('unit');
+        return config('sw802f18.sensorInfo.' . $this->sensorType . '.unit');
     }
 
     public function value()
     {
-        return $this->getValue('value');
-    }
-
-    protected function getValue($key) {
-        return $this->data[$key] ?: null;
+        return $this->value;
     }
 }

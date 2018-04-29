@@ -35,9 +35,9 @@ return [
         ],
 
         'pressure' => [
-            'dataType' => 'integer',
-            'maxValue' => 1200,
-            'minValue' => 300,
+            'dataType' => 'double',
+            'maxValue' => 1200.0,
+            'minValue' => 300.0,
             'name' => 'pressure',
             'unit' => 'hPa',
         ],

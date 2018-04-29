@@ -122,9 +122,12 @@ class SensorCluster implements SensorClusterContract
                 array_merge(
                     config('sw802f18.sensorInfo.pressure'),
                     [
-                        'value' => rand(
-                            config('sw802f18.sensorInfo.pressure.minValue'),
-                            config('sw802f18.sensorInfo.pressure.maxValue')
+                        'value' => round(
+                            rand(
+                                config('sw802f18.sensorInfo.pressure.minValue') * 100,
+                                config('sw802f18.sensorInfo.pressure.maxValue') * 100
+                            ) / 100,
+                            2
                         )
                     ]
                 )

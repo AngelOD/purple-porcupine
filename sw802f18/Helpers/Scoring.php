@@ -15,7 +15,13 @@ class Scoring implements IScoring
 
     public function __construct()
     {
-
+        $co2Classification = 0;
+        $temperatureClassification = 0;
+        $vocClassification = 0; 
+        $lightClassification = 0;
+        $noiseClassification = 0;
+        $humidityClassification = 0; 
+        $uvClassification = 0;
     }
 
     /**
@@ -37,7 +43,8 @@ class Scoring implements IScoring
                 return $i;
             }
         }
-        return $maxClassification++;
+        $maxClassification++;
+        return $maxClassification;
     }
 
     /**
@@ -164,14 +171,34 @@ class Scoring implements IScoring
     /**
      * Calculates a total score based on classifications.
      * 
+     * @param scorePulls the number of scorepulls per day
      * @return totalScore
      */
-    public function totalScore()
+    public function totalScore($scorePulls)
     {
-        $sound = $this->soundScore()*5;
-        $light = $this->lightScore()*3;
-        $iaq = $this->IAQScore()*6;
-        return $iaq + $light + $sound;
+        $sound = $this->soundScore()*0.25;
+        $visual = $this->visualScore()*0.22;
+        $iaq = $this->IAQScore()*0.3;
+        $tempHum = $this->tempHumScore()*0.23;
+        return ($iaq + $visual + $sound + $tempHum) / $scorePulls;
+    }
+
+    /**
+     * Calculates a score for temperature and humidity
+     * 
+     * @return tempHumScore
+     */
+    public function tempHumScore()
+    {
+        $totalScore = 0;
+        if($this->temperatureClassification == NULL || $this->humidityClassification == NULL)
+        {
+            return $totalScore;
+        }
+        $tempScore = $this->temperatureScore()*0.5;
+        $humidity = $this->humidityScore()*0.5;
+        $totalScore = $tempScore + $humidity;
+        return $totalScore;
     }
 
     /**
@@ -179,32 +206,32 @@ class Scoring implements IScoring
      * 
      * @return totalScore
      */
-    private function soundScore()
+    public function soundScore()
     {
         $totalScore = 0;
         if($this->noiseClassification == NULL)
         {
             return $totalScore;
         }
-        $sound = $this->noiseScore($this->noiseClassification)*0.8;
+        $sound = $this->noiseScore();
         $totalScore = $sound;
         return $totalScore;
     }
 
     /**
-     * Calculates a score for Light
+     * Calculates a score for visual
      * 
-     * @return lightScore
+     * @return visualScore
      */
-    private function lightScore()
+    public function visualScore()
     {
         $totalScore = 0;
         if($this->uvClassification == NULL || $this->lightClassification == NULL)
         {
             return $totalScore; //If we don't have the classifications, then we can't calculate a totalScore, so 0 is returned
         }
-        $uv = $this->uvScore($this->uvClassification)*0.5;
-        $lux = $this->luxScore($this->lightClassification)*0.4;
+        $uv = $this->uvScore()*0.5;
+        $lux = $this->luxScore()*0.5;
         $totalScore = $uv + $lux;
         return $totalScore;
     }
@@ -215,35 +242,32 @@ class Scoring implements IScoring
      * @param void
      * @return totalScore a total score for the IAQ
      */
-    private function IAQScore()
+    public function IAQScore()
     {
         $totalScore = 0;
         if($this->vocClassification == NULL || $this->temperatureClassification == NULL || $this->co2Classification == NULL || $this->noiseClassification == NULL || $this->humidityClassification == NULL)
         {
             return $totalScore;
         }
-        $vocScore = $this->vocScore($this->vocClassification)*0.25;
-        $tempScore = $this->temperatureScore($this->temperatureClassification)*0.3;
-        $co2Score = $this->co2Score($this->co2Classification)*0.25;
-        $humidity = $this->humidityScore($this->humidityClassification)*0.32;
-        $totalScore = $vocScore + $tempScore + $co2Score + $humidity;
+        $vocScore = $this->vocScore()*0.5;
+        $co2Score = $this->co2Score()*0.5;
+        $totalScore = $vocScore + $co2Score;
         return $totalScore;
     }
 
     /**
      * Calculates a score for VOC
      * 
-     * @param classification 
      * @return vocScore
      */
-    private function vocScore($classification)
+    public function vocScore()
     {
         $score = 0;
-        if($classification == 1)
+        if($this->vocClassification == 1)
         {
             $score = 100;
         }
-        if($classification == 2)
+        if($this->vocClassification == 2)
         {
             $score = 70;
         }
@@ -253,13 +277,12 @@ class Scoring implements IScoring
     /**
      * Calculates a score for Temperature
      * 
-     * @param classification
      * @return tempScore
      */
-    private function temperatureScore($classification)
+    public function temperatureScore()
     {
         $score = 0;
-        if ($classification == 3)
+        if ($this->temperatureClassification == 3)
         {
             $score = 100;
         }
@@ -269,17 +292,16 @@ class Scoring implements IScoring
     /**
      * Calculates a score for UV
      * 
-     * @param classification
      * @return uvScore
      */
-    private function uvScore($classification)
+    public function uvScore()
     {
         $score = 0;
-        if($classification == 1)
+        if($this->uvClassification == 1)
         {
             $score = 100;
         }
-        if($classification == 2)
+        if($this->uvClassification == 2)
         {
             $score = 80;
         }
@@ -289,17 +311,16 @@ class Scoring implements IScoring
     /**
      * Calculates a score for CO2
      * 
-     * @param classification 
      * @return co2Score
      */
-    private function co2Score($classification)
+    public function co2Score()
     {
         $score = 0;
-        if($classification == 1)
+        if($this->co2Classification == 1)
         {
             $score = 100;
         }
-        if($classification == 2)
+        if($this->co2Classification == 2)
         {
             $score  = 80;
         }
@@ -309,17 +330,16 @@ class Scoring implements IScoring
     /**
      * Calculates a score for humidity
      * 
-     * @param classification 
      * @return humidityScore
      */
-    private function humidityScore($classification)
+    public function humidityScore()
     {
         $score = 0;
-        if($classification == 3)
+        if($this->humidityClassification == 3)
         {
             $score = 100;
         }
-        if($classification == 2 || $classification == 4)
+        if($this->humidityClassification == 2 || $this->humidityClassification == 4)
         {
             $score = 75;
         }
@@ -329,21 +349,20 @@ class Scoring implements IScoring
     /**
      * Calculates a score for noise
      * 
-     * @param classification 
      * @return noiseScore
      */
-    private function noiseScore($classification)
+    public function noiseScore()
     {
         $score = 0;
-        if($classification == 1)
+        if($this->noiseClassification == 1)
         {
             $score = 100;
         }
-        if($classification == 2)
+        if($this->noiseClassification == 2)
         {
             $score = 80;
         }
-        if($classification == 3)
+        if($this->noiseClassification == 3)
         {
             $score = 60;
         }
@@ -353,21 +372,20 @@ class Scoring implements IScoring
     /**
      * Calculates a score for lux
      * 
-     * @param classification 
      * @return noiseScore
      */
-    private function luxScore($classification)
+    public function luxScore()
     {
         $score = 0;
-        if($classification == 1)
+        if($this->lightClassification == 1)
         {
             $score = 60;
         }
-        if($classification == 2)
+        if($this->lightClassification == 2)
         {
             $score = 100;
         }
-        if($classification == 3)
+        if($this->lightClassification == 3)
         {
             $score = 80;
         }

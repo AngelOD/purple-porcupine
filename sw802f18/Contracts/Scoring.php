@@ -24,9 +24,86 @@ interface Scoring
     /**
      * Calculates a total score based on classifications.
      * 
+     * @param scorePulls the number of scorepulls per day.
      * @return totalScore
      */
-    public function totalScore();
+    public function totalScore($scorePulls);
 
-    
+    /**
+     * Calculates a score for temperature and humidity
+     * 
+     * @return tempHumScore
+     */
+    public function tempHumScore();
+
+    /**
+     * Calculates a score for sound
+     * 
+     * @return soundScore
+     */
+    public function soundScore();
+
+    /**
+     * Calculates a score for Visual
+     * 
+     * @return visualScore
+     */
+    public function visualScore();
+
+    /**
+     * Rates the Indoor Air Quality with a score.
+     * 
+     * @param void
+     * @return totalScore a total score for the IAQ
+     */
+    public function IAQScore();
+
+    /**
+     * Calculates a score for VOC
+     * 
+     * @return vocScore
+     */
+    public function vocScore();
+
+    /**
+     * Calculates a score for Temperature
+     *
+     * @return tempScore
+     */
+    public function temperatureScore();
+
+    /**
+     * Calculates a score for UV
+     *
+     * @return uvScore
+     */
+    public function uvScore();
+
+    /**
+     * Calculates a score for CO2
+     * 
+     * @return co2Score
+     */
+    public function co2Score();
+
+    /**
+     * Calculates a score for humidity
+     * 
+     * @return humidityScore
+     */
+    public function humidityScore();
+
+    /**
+     * Calculates a score for noise
+     * 
+     * @return noiseScore
+     */
+    public function noiseScore();
+
+    /**
+     * Calculates a score for lux
+     * 
+     * @return noiseScore
+     */
+    public function luxScore();
 }

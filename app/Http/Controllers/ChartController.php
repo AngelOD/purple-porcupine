@@ -6,6 +6,7 @@ use Lava;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Room;
+use SW802F18\Contracts\SensorCluster;
 
 class ChartController extends Controller
 {
@@ -17,19 +18,16 @@ class ChartController extends Controller
         $scs = $room->sensorClusters;
         if (empty($scs)) { return response('Error!', 400); }
 
+        $scd = app()->makeWith(SensorCluster::class, ['skipInit' => true]);
+
         $sensorData = [];
+        $endTime = Carbon::now();
+        $startTime = $endTime->copy()->subDay();
 
         foreach ($scs as $sc) {
             $mac = $sc->node_mac_address;
-            $sensorData[$mac] = [];
-
-            // TODO: Find a better, more optimal way of retrieving data sets
-            // TODO: Perhaps a method on the SC that takes a $startTime and returns a set with the given intervals??
+            $sensorData[$mac] = RoomHelper::getFullDataset($mac, $startTime, $endTime, ['minutes' => 10]);
         }
-
-        $curTime = Carbon::now();
-        $startTime = $curTime->copy()->subDay();
-        $room->sensorDataInterval = ['minutes' => 10];
 
         $lastDay = Lava::DataTable();
 

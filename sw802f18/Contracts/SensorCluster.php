@@ -53,7 +53,7 @@ interface SensorCluster
 
     /**
      * Set the desired interval for the fetched data.
-     * Valid keys: years, months, days, hours, minutes, seconds
+     * Valid keys: days, hours, minutes, seconds
      *
      * @param int[] $interval Assoc. array of data points.
      */
@@ -65,4 +65,9 @@ interface SensorCluster
      * @return void
      */
     public function update();
+
+    /**
+     *
+     */
+    public function getFullDataset($nodeMacAddress, Carbon $startTime, Carbon $endTime, $interval);
 }

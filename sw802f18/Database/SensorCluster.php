@@ -71,8 +71,6 @@ class SensorCluster implements SensorClusterContract
     public function setInterval($interval)
     {
         $emptyInterval = [
-            'years'     => 0,
-            'months'    => 0,
             'days'      => 0,
             'hours'     => 0,
             'minutes'   => 0,
@@ -139,9 +137,7 @@ class SensorCluster implements SensorClusterContract
         $start = $this->endTime->copy();
         $end = $this->endTime->copy();
 
-        $start->subYears($this->interval['years'])
-            ->subMonths($this->interval['months'])
-            ->subDays($this->interval['days'])
+        $start->subDays($this->interval['days'])
             ->subHours($this->interval['hours'])
             ->subMinutes($this->interval['minutes'])
             ->subSeconds($this->interval['seconds']);
@@ -150,5 +146,71 @@ class SensorCluster implements SensorClusterContract
             'start' => RoomHelper::carbonToNanoTime($start),
             'end' => RoomHelper::carbonToNanoTime($end),
         ];
+    }
+
+    public function getFullDataset($nodeMacAddress, Carbon $startTime, Carbon $endTime, $interval)
+    {
+        $sensorList = [
+            'co2'           => 'co2',
+            'humidity'      => 'humidity',
+            'light'         => 'light',
+            'noise'         => 'sound_pressure',
+            'pressure'      => 'pressure',
+            'temperature'   => 'temperature',
+            'uv'            => 'uv',
+            'voc'           => 'tvoc',
+        ];
+        $result = [];
+        $startTimeNano = RoomHelper::carbonToNanoTime($startTime);
+        $endTimeNano = RoomHelper::carbonToNanoTime($endTime);
+        $intervalNano = RoomHelper::intervalToNanoInterval($interval);
+        $dataset = DB::table('radio_datas')
+                    ->where('node_mac_address', '=', $nodeMacAddress)
+                    ->where('timestamp_nano', '>', $startTimeNano)
+                    ->where('timestamp_nano', '<=', $endTimeNano)
+                    ->orderBy('timestamp_nano', 'asc')
+                    ->get();
+
+        if ($dataset->count() < 1) { return $result; }
+
+        foreach ($dataset as $entry) {
+            $index = intdiv($entry->timestamp_nano - $startTimeNano, $intervalNano);
+
+            if (!isset($result[$index])) {
+                $timestamp = $startTimeNano + $index * $intervalNano;
+                $result[$index] = [
+                    'count'         => 0,
+                    'timestamp'     => Carbon::createFromTimestampMs($timestamp / 1000000),
+                    'co2'           => 0,
+                    'humidity'      => 0,
+                    'light'         => 0,
+                    'noise'         => 0,
+                    'pressure'      => 0,
+                    'temperature'   => 0,
+                    'uv'            => 0,
+                    'voc'           => 0,
+                ];
+            }
+
+            $result[$index]['count']++;
+
+            // NOTE: Maybe this should be written out specifically, but this is a lot less typing
+            foreach ($sensorList as $key => $value) {
+                $result[$index][$key] += $entry->$value;
+            }
+        }
+
+        foreach ($result as $index => $entry) {
+            $count = $entry['count'];
+
+            $data[$index]['co2'] /= $count;
+            $data[$index]['humidity'] /= $count;
+            $data[$index]['light'] /= $count;
+            $data[$index]['noise'] /= $count;
+            $data[$index]['pressure'] /= $count;
+            $data[$index]['temperature'] /= $count;
+            $data[$index]['uv'] /= $count;
+            $data[$index]['voc'] /= $count;
+        }
     }
 }

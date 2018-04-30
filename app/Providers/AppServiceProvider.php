@@ -33,8 +33,11 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(SensorClusterContract::class, function($app, $vars) {
+            if (!array_key_exists('endTime', $vars)) { $vars['endTime'] = null; }
+            if (!array_key_exists('interval', $vars)) { $vars['interval'] = null; }
+
             $sc = new SensorCluster();
-            $sc->init($vars['nodeMacAddress']);
+            $sc->init($vars['nodeMacAddress'], $vars['interval'], $vars['endTime']);
             return $sc;
         });
     }

@@ -7,6 +7,9 @@ use SW802F18\Contracts\SensorCluster;
 
 class Room extends Model
 {
+    private $sensorDataIntervalValue = null;
+    private $sensorDataEndTimeValue = null;
+
     /**
      *
      */
@@ -24,13 +27,17 @@ class Room extends Model
         $data = [];
 
         if ($this->sensorClusters()->count() < 1) {
-            return $this->sensorClusters()->first();
+            return null;
         }
 
         foreach ($this->sensorClusters as $sc) {
             $scd = app()->makeWith(
                 SensorCluster::class,
-                ['nodeMacAddress' => $sc->node_mac_address]
+                [
+                    'nodeMacAddress' => $sc->node_mac_address,
+                    'endTime' => $this->sensorDataEndTimeValue,
+                    'interval' => $this->sensorDataIntervalValue,
+                ]
             );
             $sensors = $scd->getSensors();
 
@@ -56,5 +63,21 @@ class Room extends Model
         }
 
         return $data;
+    }
+
+    /**
+     * 
+     */
+    public function setSensorDataIntervalAttribute($interval)
+    {
+        $this->sensorDataIntervalValue = $interval;
+    }
+
+    /**
+     * 
+     */
+    public function setSensorDataEndTimeAttribute($endTime)
+    {
+        $this->sensorDataEndTimeValue = $endTime;
     }
 }

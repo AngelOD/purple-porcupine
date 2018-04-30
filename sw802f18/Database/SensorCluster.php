@@ -5,6 +5,7 @@ namespace SW802F18\Database;
 use DB;
 use Carbon\Carbon;
 use SW802F18\Contracts\SensorCluster as SensorClusterContract;
+use SW802F18\Helpers\RoomHelper;
 
 class SensorCluster implements SensorClusterContract
 {
@@ -160,8 +161,8 @@ class SensorCluster implements SensorClusterContract
             ->subSeconds($this->interval['seconds']);
 
         return [
-            'start' => $start->timestamp * 1000000000 + $start->micro * 1000,
-            'end' => $end->timestamp * 1000000000 + $end->micro * 1000,
+            'start' => RoomHelper::carbonToNanoTime($start),
+            'end' => RoomHelper::carbonToNanoTime($end),
         ];
     }
 }

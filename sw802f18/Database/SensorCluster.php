@@ -91,20 +91,26 @@ class SensorCluster implements SensorClusterContract
     {
         $times = $this->getNanoTimes();
         $data = DB::table('radio_datas')
+                    ->selectRaw(
+                        'avg(co2) as co2, '
+                        .'avg(humidity) as humidity, '
+                        .'avg(light) as light, '
+                        .'avg(sound_pressure) as sound_pressure, '
+                        .'avg(pressure) as pressure, '
+                        .'avg(temperature) as temperature, '
+                        .'avg(uv) as uv, '
+                        .'avg(tvoc) as tvoc'
+                    )
                     ->where('node_mac_address', '=', $this->nodeMacAddress)
                     ->where('timestamp_nano', '>', $times['start'])
                     ->where('timestamp_nano', '<=', $times['end'])
-                    ->orderBy('id', 'asc')
-                    ->get();
+                    ->first();
 
-        if ($data->count() > 0) {
-            $sensorData = [];
-            $sensorCount = [];
+        if (!empty($data)) {
             $metadata = [
                 'valid' => true,
                 'nodeMacAddress' => $this->nodeMacAddress,
-                'sequenceNumbers' => [],
-                'timestamps' => [],
+                'timestamp' => $this->endTime->copy(),
             ];
             $sensorList = [
                 'co2'           => 'co2',
@@ -119,27 +125,7 @@ class SensorCluster implements SensorClusterContract
 
             // Zero out data
             foreach ($sensorList as $key => $s) {
-                $sensorData[$key] = 0;
-                $sensorCount[$key] = 0;
-            }
-
-            // Loop through all the returned entries
-            foreach ($data as $entry) {
-                $metadata['sequenceNumbers'][] = $entry->sequence_number;
-                $metadata['timestamps'][] = Carbon::createFromTimestampMs(round($entry->timestamp_nano / 1000000, 4));
-
-                foreach ($sensorList as $key => $value) {
-                    $sensorData[$key] += $entry->$value;
-                    $sensorCount[$key]++;
-                }
-            }
-
-            // Set the data based on the returned
-            foreach ($sensorList as $key => $sensor) {
-                $value = $sensorData[$key];
-                if ($sensorCount[$key] > 1) { $value /= $sensorCount[$key]; }
-
-                $this->sensors[$key] = new Sensor($key, $value);
+                $this->sensors[$key] = new Sensor($key, $data->$s);
             }
 
             $this->metadata = $metadata;

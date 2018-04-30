@@ -24,17 +24,8 @@ class ChartController extends Controller
             $sensorData[$mac] = [];
 
             // TODO: Find a better, more optimal way of retrieving data sets
-            // TODO: Perhaps a method on the SC that takes a $startTime and returns a set with the given intervals?
+            // TODO: Perhaps a method on the SC that takes a $startTime and returns a set with the given intervals??
         }
-
-        $scd = app()->makeWith(
-            SensorCluster::class,
-            [
-                'nodeMacAddress' => $sc->node_mac_address,
-                'endTime' => $this->sensorDataEndTimeValue,
-                'interval' => $this->sensorDataIntervalValue,
-            ]
-        );
 
         $curTime = Carbon::now();
         $startTime = $curTime->copy()->subDay();

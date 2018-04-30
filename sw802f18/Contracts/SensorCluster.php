@@ -18,8 +18,7 @@ interface SensorCluster
      * Should have the keys:
      *  - valid [boolean]
      *  - nodeMacAddress [string]
-     *  - sequenceNumbers [int array]
-     *  - timestamps [Carbon array]
+     *  - timestamp [Carbon]
      */
     public function getMetadata();
 
@@ -47,7 +46,7 @@ interface SensorCluster
 
     /**
      * Set the end time for the fetched data. Should default to current time.
-     * 
+     *
      * @param Carbon $time Carbon instance with the time
      */
     public function setEndTime(Carbon $time);
@@ -55,7 +54,7 @@ interface SensorCluster
     /**
      * Set the desired interval for the fetched data.
      * Valid keys: years, months, days, hours, minutes, seconds
-     * 
+     *
      * @param int[] $interval Assoc. array of data points.
      */
     public function setInterval($interval);

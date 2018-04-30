@@ -66,8 +66,7 @@ class SensorCluster implements SensorClusterContract
         $this->metadata = [
             'valid' => true,
             'nodeMacAddress' => $this->nodeMacAddress,
-            'sequenceNumbers' => [rand(0, 10000)],
-            'timestamps' => [Carbon::now()],
+            'timestamps' => Carbon::now(),
         ];
 
         $this->sensors = [

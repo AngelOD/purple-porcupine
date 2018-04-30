@@ -30,6 +30,7 @@ class CreateScoresTable extends Migration
             $table->double('co2_score');
             $table->double('noise_score');
 
+            // Foreign key.
             $table->foreign('room_id')->references('id')->on('rooms');
         });
     }

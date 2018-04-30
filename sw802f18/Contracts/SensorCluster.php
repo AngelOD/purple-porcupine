@@ -2,6 +2,8 @@
 
 namespace SW802F18\Contracts;
 
+use Carbon\Carbon;
+
 interface SensorCluster
 {
     /**
@@ -9,18 +11,14 @@ interface SensorCluster
      *
      * @return void
      */
-    public function init($nodeMacAddress);
+    public function init($nodeMacAddress, $interval = null, $endTime = null);
 
     /**
      * Retrieve metadata as an associative array.
      * Should have the keys:
-     *  - valid
-     *  - radioBusID
-     *  - channel
-     *  - nodeMacAddress
-     *  - packetType
-     *  - sequenceNumber
-     *  - timestamp
+     *  - valid [boolean]
+     *  - nodeMacAddress [string]
+     *  - timestamp [Carbon]
      */
     public function getMetadata();
 
@@ -45,6 +43,21 @@ interface SensorCluster
      * @return string[] The list of sensor keys.
      */
     public function getSensorKeys();
+
+    /**
+     * Set the end time for the fetched data. Should default to current time.
+     *
+     * @param Carbon $time Carbon instance with the time
+     */
+    public function setEndTime(Carbon $time);
+
+    /**
+     * Set the desired interval for the fetched data.
+     * Valid keys: years, months, days, hours, minutes, seconds
+     *
+     * @param int[] $interval Assoc. array of data points.
+     */
+    public function setInterval($interval);
 
     /**
      * Updates the cluster's sensor data and whatever else is needed.

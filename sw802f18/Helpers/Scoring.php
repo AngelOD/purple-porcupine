@@ -1,27 +1,30 @@
 <?php
+
 namespace SW802F18\Helpers;
+
 use Carbon\Carbon;
-use SW802F18\Contracts\Scoring as IScoring;
+use SW802F18\Contracts\Scoring as ScoringContract;
+
 /**
  * This class has functions for calculating Classifications for sensors and a total score.
  * Most functions are actually more like classifiers.
  */
-class Scoring implements IScoring
+class Scoring implements ScoringContract
 {
     private $co2Classification, $temperatureClassification, 
-    $vocClassification, $lightClassification, 
-    $noiseClassification, $humidityClassification, 
-    $uvClassification;
+            $vocClassification, $lightClassification, 
+            $noiseClassification, $humidityClassification, 
+            $uvClassification;
 
     public function __construct()
     {
-        $co2Classification = 0;
-        $temperatureClassification = 0;
-        $vocClassification = 0; 
-        $lightClassification = 0;
-        $noiseClassification = 0;
-        $humidityClassification = 0; 
-        $uvClassification = 0;
+        $co2Classification          = 0;
+        $temperatureClassification  = 0;
+        $vocClassification          = 0; 
+        $lightClassification        = 0;
+        $noiseClassification        = 0;
+        $humidityClassification     = 0; 
+        $uvClassification           = 0;
     }
 
     /**

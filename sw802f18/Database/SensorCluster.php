@@ -148,8 +148,14 @@ class SensorCluster implements SensorClusterContract
         ];
     }
 
-    public function getFullDataset($nodeMacAddress, Carbon $startTime, Carbon $endTime, $interval)
+    public function getFullDataset($nodeMacAddresses, Carbon $startTime, Carbon $endTime, $interval)
     {
+        // Ensure that we're dealing with an array
+        if (!is_array($nodeMacAddresses)) {
+            $nodeMacAddresses = [$nodeMacAddresses];
+        }
+
+        // Prepare list of sensor types with both types of names (API and DB)
         $sensorList = [
             'co2'           => 'co2',
             'humidity'      => 'humidity',
@@ -160,12 +166,13 @@ class SensorCluster implements SensorClusterContract
             'uv'            => 'uv',
             'voc'           => 'tvoc',
         ];
+
         $result = [];
         $startTimeNano = RoomHelper::carbonToNanoTime($startTime);
         $endTimeNano = RoomHelper::carbonToNanoTime($endTime);
         $intervalNano = RoomHelper::intervalToNanoInterval($interval);
         $dataset = DB::table('radio_datas')
-                    ->where('node_mac_address', '=', $nodeMacAddress)
+                    ->whereIn('node_mac_address', $nodeMacAddresses)
                     ->where('timestamp_nano', '>', $startTimeNano)
                     ->where('timestamp_nano', '<=', $endTimeNano)
                     ->orderBy('timestamp_nano', 'asc')
@@ -193,24 +200,29 @@ class SensorCluster implements SensorClusterContract
             }
 
             $result[$index]['count']++;
-
-            // NOTE: Maybe this should be written out specifically, but this is a lot less typing
-            foreach ($sensorList as $key => $value) {
-                $result[$index][$key] += $entry->$value;
-            }
+            $result[$index]['co2'] += $entry->co2;
+            $result[$index]['humidity'] += $entry->humidity / 1000;
+            $result[$index]['light'] += $entry->light;
+            $result[$index]['noise'] += $entry->sound_pressure;
+            $result[$index]['pressure'] += $entry->pressure / 100;
+            $result[$index]['temperature'] += $entry->temperature / 100;
+            $result[$index]['uv'] += $entry->uv;
+            $result[$index]['voc'] += $entry->tvoc;
         }
 
         foreach ($result as $index => $entry) {
             $count = $entry['count'];
 
-            $data[$index]['co2'] /= $count;
-            $data[$index]['humidity'] /= $count;
-            $data[$index]['light'] /= $count;
-            $data[$index]['noise'] /= $count;
-            $data[$index]['pressure'] /= $count;
-            $data[$index]['temperature'] /= $count;
-            $data[$index]['uv'] /= $count;
-            $data[$index]['voc'] /= $count;
+            $result[$index]['co2'] /= $count;
+            $result[$index]['humidity'] /= $count;
+            $result[$index]['light'] /= $count;
+            $result[$index]['noise'] /= $count;
+            $result[$index]['pressure'] /= $count;
+            $result[$index]['temperature'] /= $count;
+            $result[$index]['uv'] /= $count;
+            $result[$index]['voc'] /= $count;
         }
+
+        return $result;
     }
 }

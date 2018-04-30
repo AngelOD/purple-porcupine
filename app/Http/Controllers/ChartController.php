@@ -20,14 +20,14 @@ class ChartController extends Controller
 
         $scd = app()->makeWith(SensorCluster::class, ['skipInit' => true]);
 
-        $sensorData = [];
         $endTime = Carbon::now();
         $startTime = $endTime->copy()->subDay();
-
-        foreach ($scs as $sc) {
-            $mac = $sc->node_mac_address;
-            $sensorData[$mac] = RoomHelper::getFullDataset($mac, $startTime, $endTime, ['minutes' => 10]);
-        }
+        $sensorData = $scd->getFullDataset(
+            $scs->map(function ($elem) { return $elem->node_mac_address; }),
+            $startTime, 
+            $endTime, 
+            ['minutes' => 10]
+        );
 
         $lastDay = Lava::DataTable();
 
@@ -37,21 +37,14 @@ class ChartController extends Controller
                 ->addNumberColumn('Temperature')
                 ->addNumberColumn('VOC');
 
-        while ($curTime->gte($startTime)) {
-            $room->sensorDataEndTime = $curTime;
-            $data = $room->averageSensorData;
-
-            if (!empty($data)) {
-                $lastDay->addRow([
-                    $curTime->toDateTimeString(),
-                    $data['co2'],
-                    $data['humidity'],
-                    $data['temperature'],
-                    $data['voc'],
-                ]);
-            }
-
-            $curTime->subMinutes(10);
+        foreach ($sensorData as $entry) {
+            $lastDay->addRow([
+                $entry['timestamp']->toDateTimeString(),
+                $entry['co2'],
+                $entry['humidity'],
+                $entry['temperature'],
+                $entry['voc'],
+            ]);
         }
 
         Lava::LineChart('LastDay', $lastDay, [

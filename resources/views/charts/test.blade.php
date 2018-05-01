@@ -8,11 +8,13 @@
                 <div class="card-header">Lavachart Test</div>
 
                 <div class="card-body">
-                    <div id="last_day_div"></div>
+                    <div id="last_day_co2_div"></div>
+                    <div id="last_day_rest_div"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-@linechart('LastDay', 'last_day_div')
+@linechart('LastDayCO2', 'last_day_co2_div')
+@linechart('LastDayRest', 'last_day_rest_div')
 @endsection

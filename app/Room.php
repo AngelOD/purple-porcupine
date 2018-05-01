@@ -19,6 +19,14 @@ class Room extends Model
     }
 
     /**
+     * 
+     */
+    public function scores()
+    {
+        return $this->hasMany('App\Score', 'room_id', 'id');
+    }
+
+    /**
      *
      */
     public function getAverageSensorDataAttribute()

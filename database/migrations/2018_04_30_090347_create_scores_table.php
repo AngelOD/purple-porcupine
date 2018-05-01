@@ -15,20 +15,10 @@ class CreateScoresTable extends Migration
     {
         Schema::create('scores', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('timestamp');
+            $table->bigInteger('end_time');
+            $table->integer('interval');
             $table->integer('room_id');
             $table->double('total_score');
-            $table->double('IAQ_score');
-            $table->double('temperature_humidity_score');
-            $table->double('sound_score');
-            $table->double('visual_score');
-            $table->double('voc_score');
-            $table->double('temperature_score');
-            $table->double('humidity_score');
-            $table->double('light_score');
-            $table->double('uv_score');
-            $table->double('co2_score');
-            $table->double('noise_score');
 
             // Foreign key.
             $table->foreign('room_id')->references('id')->on('rooms');

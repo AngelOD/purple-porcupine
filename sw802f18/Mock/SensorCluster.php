@@ -169,4 +169,9 @@ class SensorCluster implements SensorClusterContract
             ),
         ];
     }
+
+    public function getFullDataset($nodeMacAddresses, Carbon $startTime, Carbon $endTime, $interval)
+    {
+        // TODO: Write this
+    }
 }

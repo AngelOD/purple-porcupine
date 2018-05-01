@@ -6,6 +6,7 @@ use Lava;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Room;
+use SW802F18\Contracts\SensorCluster;
 
 class ChartController extends Controller
 {
@@ -17,47 +18,47 @@ class ChartController extends Controller
         $scs = $room->sensorClusters;
         if (empty($scs)) { return response('Error!', 400); }
 
-        $sensorData = [];
+        $scd = app()->makeWith(SensorCluster::class, ['skipInit' => true]);
 
-        foreach ($scs as $sc) {
-            $mac = $sc->node_mac_address;
-            $sensorData[$mac] = [];
+        $endTime = Carbon::now();
+        $startTime = $endTime->copy()->subDay();
+        $sensorData = $scd->getFullDataset(
+            $scs->map(function ($elem) { return $elem->node_mac_address; }),
+            $startTime,
+            $endTime,
+            ['minutes' => 10]
+        );
 
-            // TODO: Find a better, more optimal way of retrieving data sets
-            // TODO: Perhaps a method on the SC that takes a $startTime and returns a set with the given intervals??
-        }
+        $lastDayCO2 = Lava::DataTable();
+        $lastDayCO2->addDateTimeColumn('DateTime')
+                ->addNumberColumn('CO2');
 
-        $curTime = Carbon::now();
-        $startTime = $curTime->copy()->subDay();
-        $room->sensorDataInterval = ['minutes' => 10];
-
-        $lastDay = Lava::DataTable();
-
-        $lastDay->addDateTimeColumn('DateTime')
-                ->addNumberColumn('CO2')
+        $lastDayRest = Lava::DataTable();
+        $lastDayRest->addDateTimeColumn('DateTime')
                 ->addNumberColumn('Humidity')
                 ->addNumberColumn('Temperature')
                 ->addNumberColumn('VOC');
 
-        while ($curTime->gte($startTime)) {
-            $room->sensorDataEndTime = $curTime;
-            $data = $room->averageSensorData;
+        foreach ($sensorData as $entry) {
+            $lastDayCO2->addRow([
+                $entry['timestamp']->toDateTimeString(),
+                $entry['co2'],
+            ]);
 
-            if (!empty($data)) {
-                $lastDay->addRow([
-                    $curTime->toDateTimeString(),
-                    $data['co2'],
-                    $data['humidity'],
-                    $data['temperature'],
-                    $data['voc'],
-                ]);
-            }
-
-            $curTime->subMinutes(10);
+            $lastDayRest->addRow([
+                $entry['timestamp']->toDateTimeString(),
+                $entry['humidity'],
+                $entry['temperature'],
+                $entry['voc'],
+            ]);
         }
 
-        Lava::LineChart('LastDay', $lastDay, [
-            'title' => 'Last day for ' . $room->name . (!empty($room->alt_name) ? ' (' . $room->alt_name . ')' : '')
+        Lava::LineChart('LastDayCO2', $lastDayCO2, [
+            'title' => 'Last day for ' . $room->name . (!empty($room->alt_name) ? ' (' . $room->alt_name . ')' : ''),
+        ]);
+
+        Lava::LineChart('LastDayRest', $lastDayRest, [
+            'title' => 'Last day for ' . $room->name . (!empty($room->alt_name) ? ' (' . $room->alt_name . ')' : ''),
         ]);
 
         return view('charts.test');

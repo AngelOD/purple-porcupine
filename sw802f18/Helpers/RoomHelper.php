@@ -31,13 +31,38 @@ class RoomHelper
     }
 
     /**
-     * 
+     *
      */
     public static function carbonToNanoTime(Carbon $carbon)
     {
         if (empty($carbon)) { return false; }
 
         return $carbon->timestamp * 1000000000 + $carbon->micro * 1000;
+    }
+
+    public static function intervalToNanoInterval($interval)
+    {
+        if (!is_array($interval)) {
+            if (is_numeric($interval)) { return $interval * 1000000000; }
+
+            return 0;
+        }
+
+        $result = 0;
+        $inSeconds = [
+            'days' => 24 * 60 * 60,
+            'hours' => 60 * 60,
+            'minutes' => 60,
+            'seconds' => 1,
+        ];
+
+        foreach ($interval as $key => $value) {
+            if (array_key_exists($key, $inSeconds)) {
+                $result += $inSeconds[$key] * $value;
+            }
+        }
+
+        return $result * 1000000000;
     }
 
     /**

@@ -55,10 +55,50 @@ class ChartController extends Controller
 
         Lava::LineChart('LastDayCO2', $lastDayCO2, [
             'title' => 'Last day for ' . $room->name . (!empty($room->alt_name) ? ' (' . $room->alt_name . ')' : ''),
+            'legend' => [
+                'position' => 'bottom'
+            ],
+            'trendlines' => [
+                [
+                    'type' => 'linear',
+                    'visibleInLegend' => true,
+                ]
+            ],
+            'hAxis' => [
+                'viewWindow' => [
+                    'min' => sprintf(
+                        "Date(%d, %d, %d, %d, %d, %d)",
+                        $startTime->year, $startTime->month - 1, $startTime->day,
+                        $startTime->hour, $startTime->minute, $startTime->second
+                    ),
+                    'max' => sprintf(
+                        "Date(%d, %d, %d, %d, %d, %d)",
+                        $endTime->year, $endTime->month - 1, $endTime->day,
+                        $endTime->hour, $endTime->minute, $endTime->second
+                    ),
+                ],
+            ],
         ]);
 
         Lava::LineChart('LastDayRest', $lastDayRest, [
             'title' => 'Last day for ' . $room->name . (!empty($room->alt_name) ? ' (' . $room->alt_name . ')' : ''),
+            'legend' => [
+                'position' => 'bottom'
+            ],
+            'hAxis' => [
+                'viewWindow' => [
+                    'min' => sprintf(
+                        "Date(%d, %d, %d, %d, %d, %d)",
+                        $startTime->year, $startTime->month - 1, $startTime->day,
+                        $startTime->hour, $startTime->minute, $startTime->second
+                    ),
+                    'max' => sprintf(
+                        "Date(%d, %d, %d, %d, %d, %d)",
+                        $endTime->year, $endTime->month - 1, $endTime->day,
+                        $endTime->hour, $endTime->minute, $endTime->second
+                    ),
+                ],
+            ],
         ]);
 
         return view('charts.test');

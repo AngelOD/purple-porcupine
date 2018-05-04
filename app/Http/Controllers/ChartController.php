@@ -53,16 +53,13 @@ class ChartController extends Controller
             ]);
         }
 
+        $startTime->addHours(2);
+        $endTime->addHours(2);
+
         Lava::LineChart('LastDayCO2', $lastDayCO2, [
             'title' => 'Last day for ' . $room->name . (!empty($room->alt_name) ? ' (' . $room->alt_name . ')' : ''),
             'legend' => [
                 'position' => 'bottom'
-            ],
-            'trendlines' => [
-                [
-                    'type' => 'linear',
-                    'visibleInLegend' => true,
-                ]
             ],
             'hAxis' => [
                 'viewWindow' => [

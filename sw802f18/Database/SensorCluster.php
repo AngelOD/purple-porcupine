@@ -187,7 +187,7 @@ class SensorCluster implements SensorClusterContract
                 $timestamp = $startTimeNano + $index * $intervalNano;
                 $result[$index] = [
                     'count'         => 0,
-                    'timestamp'     => Carbon::createFromTimestampMs($timestamp / 1000000),
+                    'timestamp'     => Carbon::createFromTimestampMs($timestamp / 1000000 + 7200000),
                     'co2'           => 0,
                     'humidity'      => 0,
                     'light'         => 0,

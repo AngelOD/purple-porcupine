@@ -23,7 +23,7 @@ class RoomHelper
             $id = '';
 
             for ($i = 0; $i < 4; $i++) {
-                $id .= substr(self::CHARACTERS, rand(0, strlen(self::CHARACTERS)), 1);
+                $id .= substr(self::CHARACTERS, rand(0, strlen(self::CHARACTERS)-1), 1);
             }
         }
 

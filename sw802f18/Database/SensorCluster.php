@@ -148,7 +148,7 @@ class SensorCluster implements SensorClusterContract
         ];
     }
 
-    public function getFullDataset($nodeMacAddresses, Carbon $startTime, Carbon $endTime, $interval)
+    public function getFullDataset($nodeMacAddresses, Carbon $startTime, Carbon $endTime, $interval, $tz = 'Europe/Copenhagen')
     {
         // Ensure that we're dealing with an array
         if (!is_array($nodeMacAddresses)) {
@@ -187,7 +187,7 @@ class SensorCluster implements SensorClusterContract
                 $timestamp = $startTimeNano + $index * $intervalNano;
                 $result[$index] = [
                     'count'         => 0,
-                    'timestamp'     => Carbon::createFromTimestampMs($timestamp / 1000000 + 7200000),
+                    'timestamp'     => Carbon::createFromTimestampMs($timestamp / 1000000, $tz),
                     'co2'           => 0,
                     'humidity'      => 0,
                     'light'         => 0,

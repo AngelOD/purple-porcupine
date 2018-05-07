@@ -4,6 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use SW802F18\Contracts\SensorCluster;
+use SW802F18\Helpers\Scoring;
+use Carbon\Carbon;
+use SW802F18\Helpers\RoomHelper;
 
 class Room extends Model
 {
@@ -87,5 +90,74 @@ class Room extends Model
     public function setSensorDataEndTimeAttribute($endTime)
     {
         $this->sensorDataEndTimeValue = $endTime;
+    }
+
+    /**
+     * Returns the score for current day-
+     * @return array Array empty if no scores are recorded.
+     */
+    public function getScoresForThisDayAttribute()
+    {
+        $data = [];
+        $currentDay = Carbon::now();
+        $startNanoTime = RoomHelper::carbonToNanoTime($currentDay->copy()->startOfDay());
+        $endNanoTime = RoomHelper::carbonToNanoTime($currentDay->copy()->endOfDay());
+        $scores = $this->scores()->whereBetween('endTime', "[$startNanoTime, $endNanoTime]")->get();
+
+        if($scores->count() < 1)
+        {
+            return $data;
+        }
+
+        foreach($scores as $score)
+        {
+            $data[] = [
+                'room_id' => $score->room_id,
+                'id' => $score->id,
+                'end_time' => $score->end_time,
+                'interval' => $score->interval,
+                'total_score' => $score->total_score,
+                'IAQ_score' => $score->IAQ_score,
+                'sound_score' => $score->sound_score,
+                'temp_hum_score' => $score->temp_hum_score,
+                'visual_score' => $score->visual_score,
+            ];
+        }
+
+        return $data;
+    }
+
+    /**
+     * Sets the scores based on the values from the parameters
+     * @param voc;
+     * @param co2,
+     * @param noise,
+     * @param light,
+     * @param temperature,
+     * @param humidity,
+     * @param uv
+     */
+    public function addScore($voc, $co2, $noise, $light, $temperature, $humidity, $uv)
+    {
+        $scoring = new Scoring();
+        $now = Carbon::now();
+        $scoring->updateAllClassifications($uv, $light, $voc, $temperature, $co2, $noise, $humidity, $now);
+
+        $score = Score::make(); 
+        $score->total_score = $scoring->totalScore(1);
+        $score->IAQ_score = $scoring->IAQScore();
+        $score->visual_score = $scoring->visualScore();
+        $score->sound_score = $scoring->soundScore();
+        $score->temp_hum_score = $scoring->tempHumScore();
+        $score->end_time = $now;
+        $score->interval = RoomHelper::intervalToNanoInterval([
+            'days' => 0,
+            'hours' => 0,
+            'minutes' => 10,
+            'seconds' => 0,
+        ]);
+
+        $this->scores()->save($score);
+     //   $score->save();
     }
 }

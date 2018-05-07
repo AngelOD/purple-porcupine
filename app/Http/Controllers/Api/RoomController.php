@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use SW802F18\Helpers\RoomHelper;
 use App\Room;
+use App\Score;
+use DB;
 
 class RoomController extends Controller
 {
@@ -20,11 +23,12 @@ class RoomController extends Controller
         $rooms = Room::get();
 
         foreach ($rooms as $room) {
+            $score = DB::table('scores')->where('room_id', '=', $room->internal_id)->latest()->first();
             $data[] = [
                 'id' => $room->internal_id,
                 'name' => $room->name,
                 'altName' => $room->alt_name,
-                'score' => rand(0, 1500),
+                'score' => $score->total_score,
             ];
         }
 
@@ -42,12 +46,12 @@ class RoomController extends Controller
         $room = Room::where('internal_id', '=', strtoupper($roomID))->first();
 
         if (empty($room)) { return response()->json('Invalid parameter data', 400); }
-
+        $score = DB::table('scores')->where('room_id', '=', $room->internal_id)->latest()->first();
         return response()->json([
             "id" => $room->internal_id,
             "name" => $room->name,
             "altName" => $room->alt_name,
-            "score" => rand(0, 1500),
+            "score" => $score->total_score,
         ], 200);
     }
 
@@ -88,5 +92,21 @@ class RoomController extends Controller
             default:
                 return response()->json("No sensor found", 400);
         }
+    }
+
+    /**
+     * Gets the socre for today.
+     * @return array 
+     */
+    public function getScoresForToday($roomID)
+    {
+        $room = Room::where('internal_id', '=', strtoupper($roomID))->first();
+
+        if(empty($room))
+        {
+            return response()->json('Invalid parameter data', 400);
+        }
+
+        return $room->scoresForThisDay;
     }
 }

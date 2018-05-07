@@ -17,8 +17,13 @@ class CreateScoresTable extends Migration
             $table->increments('id');
             $table->bigInteger('end_time');
             $table->integer('interval');
-            $table->integer('room_id');
+            $table->integer('room_id')->unsigned();
             $table->double('total_score');
+            $table->double('IAQ_score');
+            $table->double('sound_score');
+            $table->double('temp_hum_score');
+            $table->double('visual_score');
+            $table->timestamps();
 
             // Foreign key.
             $table->foreign('room_id')->references('id')->on('rooms');

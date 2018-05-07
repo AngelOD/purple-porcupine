@@ -98,6 +98,10 @@ class ChartController extends Controller
             ],
         ]);
 
-        return view('charts.test');
+        return view('charts.test', [
+            'rooms' => Room::orderBy('name', 'asc')->get(),
+            'roomID' => $roomID,
+            'curRoom' => $room,
+        ]);
     }
 }

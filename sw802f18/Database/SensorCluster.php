@@ -5,7 +5,7 @@ namespace SW802F18\Database;
 use DB;
 use Carbon\Carbon;
 use SW802F18\Contracts\SensorCluster as SensorClusterContract;
-use SW802F18\Helpers\RoomHelper;
+use SW802F18\Helpers\TimeHelper;
 
 class SensorCluster implements SensorClusterContract
 {
@@ -143,12 +143,12 @@ class SensorCluster implements SensorClusterContract
             ->subSeconds($this->interval['seconds']);
 
         return [
-            'start' => RoomHelper::carbonToNanoTime($start),
-            'end' => RoomHelper::carbonToNanoTime($end),
+            'start' => TimeHelper::carbonToNanoTime($start),
+            'end' => TimeHelper::carbonToNanoTime($end),
         ];
     }
 
-    public function getFullDataset($nodeMacAddresses, Carbon $startTime, Carbon $endTime, $interval)
+    public function getFullDataset($nodeMacAddresses, Carbon $startTime, Carbon $endTime, $interval, $tz = 'Europe/Copenhagen')
     {
         // Ensure that we're dealing with an array
         if (!is_array($nodeMacAddresses)) {
@@ -168,9 +168,9 @@ class SensorCluster implements SensorClusterContract
         ];
 
         $result = [];
-        $startTimeNano = RoomHelper::carbonToNanoTime($startTime);
-        $endTimeNano = RoomHelper::carbonToNanoTime($endTime);
-        $intervalNano = RoomHelper::intervalToNanoInterval($interval);
+        $startTimeNano = TimeHelper::carbonToNanoTime($startTime);
+        $endTimeNano = TimeHelper::carbonToNanoTime($endTime);
+        $intervalNano = TimeHelper::intervalToNanoInterval($interval);
         $dataset = DB::table('radio_datas')
                     ->whereIn('node_mac_address', $nodeMacAddresses)
                     ->where('timestamp_nano', '>', $startTimeNano)
@@ -187,7 +187,7 @@ class SensorCluster implements SensorClusterContract
                 $timestamp = $startTimeNano + $index * $intervalNano;
                 $result[$index] = [
                     'count'         => 0,
-                    'timestamp'     => Carbon::createFromTimestampMs($timestamp / 1000000 + 7200000),
+                    'timestamp'     => Carbon::createFromTimestampMs($timestamp / 1000000, $tz),
                     'co2'           => 0,
                     'humidity'      => 0,
                     'light'         => 0,

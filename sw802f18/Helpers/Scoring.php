@@ -177,7 +177,7 @@ class Scoring implements ScoringContract
      * @param scorePulls the number of scorepulls per day
      * @return totalScore
      */
-    public function totalScore($scorePulls)
+    public function totalScore($scorePulls = 1)
     {
         $sound = $this->soundScore()*0.25;
         $visual = $this->visualScore()*0.22;

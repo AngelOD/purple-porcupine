@@ -5,7 +5,7 @@ namespace SW802F18\Database;
 use DB;
 use Carbon\Carbon;
 use SW802F18\Contracts\SensorCluster as SensorClusterContract;
-use SW802F18\Helpers\RoomHelper;
+use SW802F18\Helpers\TimeHelper;
 
 class SensorCluster implements SensorClusterContract
 {
@@ -143,8 +143,8 @@ class SensorCluster implements SensorClusterContract
             ->subSeconds($this->interval['seconds']);
 
         return [
-            'start' => RoomHelper::carbonToNanoTime($start),
-            'end' => RoomHelper::carbonToNanoTime($end),
+            'start' => TimeHelper::carbonToNanoTime($start),
+            'end' => TimeHelper::carbonToNanoTime($end),
         ];
     }
 
@@ -168,9 +168,9 @@ class SensorCluster implements SensorClusterContract
         ];
 
         $result = [];
-        $startTimeNano = RoomHelper::carbonToNanoTime($startTime);
-        $endTimeNano = RoomHelper::carbonToNanoTime($endTime);
-        $intervalNano = RoomHelper::intervalToNanoInterval($interval);
+        $startTimeNano = TimeHelper::carbonToNanoTime($startTime);
+        $endTimeNano = TimeHelper::carbonToNanoTime($endTime);
+        $intervalNano = TimeHelper::intervalToNanoInterval($interval);
         $dataset = DB::table('radio_datas')
                     ->whereIn('node_mac_address', $nodeMacAddresses)
                     ->where('timestamp_nano', '>', $startTimeNano)

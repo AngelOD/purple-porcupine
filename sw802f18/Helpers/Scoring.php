@@ -57,8 +57,8 @@ class Scoring implements ScoringContract
      */
     private function noiseClassification($sensorValue)
     {
-        $lower = [0, 40, 50, 60, 75];
-        $upper = [40, 50, 60, 75, 120];
+        $lower = [0, 45, 60, 67, 75];
+        $upper = [45, 60, 67, 75, 120];
         $this->noiseClassification = $this->classification($sensorValue, $lower, $upper);
     }
 
@@ -69,8 +69,8 @@ class Scoring implements ScoringContract
      */
     private function co2Classification($sensorValue)
     {
-        $lower = [0, 800, 1000, 1200, 1400];
-        $upper = [800, 1000, 1200, 1400, 10000];
+        $lower = [0, 1000, 1200, 1400, 2000];
+        $upper = [1000, 1200, 1400, 2000, 10000];
         $this->co2Classification = $this->classification($sensorValue, $lower, $upper);
     }
 
@@ -82,8 +82,8 @@ class Scoring implements ScoringContract
      */
     private function vocClassification($sensorValue)
     {
-        $lower = [0, 60, 120, 180, 240];
-        $upper = [60, 120, 180, 240, 1000];
+        $lower = [0, 60, 90, 120, 180];
+        $upper = [60, 90, 120, 180, 1000];
         $this->vocClassification = $this->classification($sensorValue, $lower, $upper);
     }
 
@@ -142,8 +142,8 @@ class Scoring implements ScoringContract
      */
     private function lightClassification($sensorValue)
     {
-        $lower = [0, 200, 400, 1000, 5000];
-        $upper = [200, 400, 1000, 5000, 10000];
+        $lower = [0, 200, 400, 1000, 2000];
+        $upper = [200, 400, 1000, 2000, 10000];
         $this->lightClassification = $this->classification($sensorValue, $lower, $upper);
     }
 
@@ -177,7 +177,7 @@ class Scoring implements ScoringContract
      * @param scorePulls the number of scorepulls per day
      * @return totalScore
      */
-    public function totalScore($scorePulls)
+    public function totalScore($scorePulls = 1)
     {
         $sound = $this->soundScore()*0.25;
         $visual = $this->visualScore()*0.22;
@@ -243,7 +243,7 @@ class Scoring implements ScoringContract
      * Rates the Indoor Air Quality with a score.
      * 
      * @param void
-     * @return totalScore a total score for the IAQ
+     * @return double a total score for the IAQ
      */
     public function IAQScore()
     {
@@ -272,7 +272,15 @@ class Scoring implements ScoringContract
         }
         if($this->vocClassification == 2)
         {
-            $score = 70;
+            $score = 75;
+        }
+        if($this->vocClassification == 3)
+        {
+            $score = 50;
+        }
+        if($this->vocClassification == 4)
+        {
+            $score = 25;
         }
         return $score;
     }
@@ -325,8 +333,17 @@ class Scoring implements ScoringContract
         }
         if($this->co2Classification == 2)
         {
-            $score  = 80;
+            $score  = 75;
         }
+        if($this->co2Classification == 3)
+        {
+            $score  = 50;
+        }
+        if($this->co2Classification == 4)
+        {
+            $score  = 25;
+        }
+
         return $score;
     }
 
@@ -344,7 +361,7 @@ class Scoring implements ScoringContract
         }
         if($this->humidityClassification == 2 || $this->humidityClassification == 4)
         {
-            $score = 75;
+            $score = 50;
         }
         return $score;
     }
@@ -363,11 +380,15 @@ class Scoring implements ScoringContract
         }
         if($this->noiseClassification == 2)
         {
-            $score = 80;
+            $score = 75;
         }
         if($this->noiseClassification == 3)
         {
-            $score = 60;
+            $score = 50;
+        }
+        if($this->noiseClassification == 4)
+        {
+            $score = 25;
         }
         return $score;
     }
@@ -375,22 +396,18 @@ class Scoring implements ScoringContract
     /**
      * Calculates a score for lux
      * 
-     * @return noiseScore
+     * @return lightScore
      */
     public function luxScore()
     {
         $score = 0;
-        if($this->lightClassification == 1)
-        {
-            $score = 60;
-        }
-        if($this->lightClassification == 2)
+        if($this->lightClassification == 3)
         {
             $score = 100;
         }
-        if($this->lightClassification == 3)
+        if($this->lightClassification == 2 || $this->lightClassification == 4)
         {
-            $score = 80;
+            $score = 50;
         }
         return $score;
     }

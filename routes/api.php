@@ -25,7 +25,7 @@ Route::namespace('Api')->group(function() {
     Route::get('/rooms/{roomId}', 'RoomController@show');
     Route::get('/rooms/{roomId}/{sensorType}', 'RoomController@showSensor');
     Route::get('/test','SensorController@updateSensor');
-    Route::get('/test/{roomId}', 'RoomController@getScoresForToday');
+    Route::get('/scores/{roomId}', 'RoomController@getScoresForToday');
 });
 
 // Protected routes

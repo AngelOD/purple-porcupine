@@ -23,7 +23,7 @@ class RoomController extends Controller
         $rooms = Room::get();
 
         foreach ($rooms as $room) {
-            $score = DB::table('scores')->where('room_id', '=', $room->internal_id)->latest()->first();
+            $score = $room->scores()->latest()->first();
             $data[] = [
                 'id' => $room->internal_id,
                 'name' => $room->name,
@@ -46,7 +46,7 @@ class RoomController extends Controller
         $room = Room::where('internal_id', '=', strtoupper($roomID))->first();
 
         if (empty($room)) { return response()->json('Invalid parameter data', 400); }
-        $score = DB::table('scores')->where('room_id', '=', $room->internal_id)->latest()->first();
+        $score = $room->scores()->latest()->first();
         return response()->json([
             "id" => $room->internal_id,
             "name" => $room->name,

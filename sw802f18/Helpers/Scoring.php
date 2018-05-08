@@ -11,25 +11,25 @@ use SW802F18\Contracts\Scoring as ScoringContract;
  */
 class Scoring implements ScoringContract
 {
-    private $co2Classification, $temperatureClassification, 
-            $vocClassification, $lightClassification, 
-            $noiseClassification, $humidityClassification, 
+    private $co2Classification, $temperatureClassification,
+            $vocClassification, $lightClassification,
+            $noiseClassification, $humidityClassification,
             $uvClassification;
 
     public function __construct()
     {
         $co2Classification          = 0;
         $temperatureClassification  = 0;
-        $vocClassification          = 0; 
+        $vocClassification          = 0;
         $lightClassification        = 0;
         $noiseClassification        = 0;
-        $humidityClassification     = 0; 
+        $humidityClassification     = 0;
         $uvClassification           = 0;
     }
 
     /**
      * This function returns a Classification no matter what type of sensor the data comes from.
-     * 
+     *
      * @param parameters is the output from the sensor
      * @param low low is the an array of the lower bound values for each comparision.
      * @param up up is the an array of the upper bound values for each comparision.
@@ -52,7 +52,7 @@ class Scoring implements ScoringContract
 
     /**
      * This function makes a noise Classification based on the input
-     * 
+     *
      * @param sensorValue the value from the sensor...
      */
     private function noiseClassification($sensorValue)
@@ -64,7 +64,7 @@ class Scoring implements ScoringContract
 
     /**
      * This function makes a co2 Classification based on the input
-     * 
+     *
      * @param sensorValue the value from the sensor
      */
     private function co2Classification($sensorValue)
@@ -77,7 +77,7 @@ class Scoring implements ScoringContract
     /**
      * TODO: upper og lower values skal muligvis rettes
      * This function makes a VOC Classification based on the input
-     * 
+     *
      * @param sensorValue the value from the sensor
      */
     private function vocClassification($sensorValue)
@@ -89,7 +89,7 @@ class Scoring implements ScoringContract
 
     /**
      * This function makes a temperature Classification based on the input
-     * 
+     *
      * @param sensorValue the value from the sensor
      */
     private function temperatureClassification($sensorValue)
@@ -101,21 +101,21 @@ class Scoring implements ScoringContract
 
     /**
      * This function makes a humidity Classification based on the input and  time
-     * 
-     * @param sensorValue the value from the sensor
-     * @param nanoTime the time in nanoseconds
+     *
+     * @param double|int $sensorValue the value from the sensor
+     * @param Carbon $nanoTime the time in nanoseconds
      */
-    private function humidityClassification($sensorValue, $nanoTime)
+    private function humidityClassification($sensorValue, Carbon $time)
     {
         $lower;
         $upper;
-        $month = $nanoTime->month;
+        $month = $time->month;
         if($month == 1 || $month == 2 || $month == 3 || $month == 4 || $month == 10 || $month == 11 || $month == 12) //Winter months
         {
             $lower = [0, 25, 35, 40, 45];
             $upper = [25, 35, 40, 45, 100];
         }
-        else //If it isn't winter, then it must be summer. 
+        else //If it isn't winter, then it must be summer.
         {
             $lower = [0, 25, 35, 50, 60];
             $upper = [25, 35, 50, 60, 100];
@@ -125,7 +125,7 @@ class Scoring implements ScoringContract
 
     /**
      * This function makes a humidity Classification based on the input
-     * 
+     *
      * @param sensorValue the value from the sensor
      */
     private function uvClassification($sensorValue)
@@ -137,7 +137,7 @@ class Scoring implements ScoringContract
 
     /**
      * This function makes light Classification based on the input
-     * 
+     *
      * @param sensorValue the value from the sensor
      */
     private function lightClassification($sensorValue)
@@ -150,7 +150,7 @@ class Scoring implements ScoringContract
     /**
      * This function updates all the Classifications, instead of calling all the other functions individually. Convinience, I guess?
      * Call this before totalScore() in order to get the most recent score result.
-     * 
+     *
      * @param uv UV
      * @param light Light level
      * @param voc VOC value
@@ -158,14 +158,14 @@ class Scoring implements ScoringContract
      * @param co2 CO2 value
      * @param noise Noise value
      * @param humidity Humidity value
-     * @param nanoTime The time in nano seconds 
+     * @param nanoTime The time in nano seconds
      */
-    public function updateAllClassifications($uv, $light, $voc, $temperature, $co2, $noise, $humidity, $nanoTime)
+    public function updateAllClassifications($uv, $light, $voc, $temperature, $co2, $noise, $humidity, Carbon $time)
     {
         $this->lightClassification($light);
         $this->uvClassification($uv);
         $this->co2Classification($co2);
-        $this->humidityClassification($humidity, $nanoTime);
+        $this->humidityClassification($humidity, $time);
         $this->temperatureClassification($temperature);
         $this->vocClassification($voc);
         $this->noiseClassification($noise);
@@ -173,7 +173,7 @@ class Scoring implements ScoringContract
 
     /**
      * Calculates a total score based on classifications.
-     * 
+     *
      * @param scorePulls the number of scorepulls per day
      * @return totalScore
      */
@@ -181,14 +181,14 @@ class Scoring implements ScoringContract
     {
         $sound = $this->soundScore()*0.25;
         $visual = $this->visualScore()*0.22;
-        $iaq = $this->IAQScore()*0.3;
+        $iaq = $this->iaqScore()*0.3;
         $tempHum = $this->tempHumScore()*0.23;
         return ($iaq + $visual + $sound + $tempHum) / $scorePulls;
     }
 
     /**
      * Calculates a score for temperature and humidity
-     * 
+     *
      * @return tempHumScore
      */
     public function tempHumScore()
@@ -206,7 +206,7 @@ class Scoring implements ScoringContract
 
     /**
      * Calculates a score for sound
-     * 
+     *
      * @return totalScore
      */
     public function soundScore()
@@ -223,7 +223,7 @@ class Scoring implements ScoringContract
 
     /**
      * Calculates a score for visual
-     * 
+     *
      * @return visualScore
      */
     public function visualScore()
@@ -241,11 +241,11 @@ class Scoring implements ScoringContract
 
     /**
      * Rates the Indoor Air Quality with a score.
-     * 
+     *
      * @param void
      * @return double a total score for the IAQ
      */
-    public function IAQScore()
+    public function iaqScore()
     {
         $totalScore = 0;
         if($this->vocClassification == NULL || $this->temperatureClassification == NULL || $this->co2Classification == NULL || $this->noiseClassification == NULL || $this->humidityClassification == NULL)
@@ -260,7 +260,7 @@ class Scoring implements ScoringContract
 
     /**
      * Calculates a score for VOC
-     * 
+     *
      * @return vocScore
      */
     public function vocScore()
@@ -287,7 +287,7 @@ class Scoring implements ScoringContract
 
     /**
      * Calculates a score for Temperature
-     * 
+     *
      * @return tempScore
      */
     public function temperatureScore()
@@ -302,7 +302,7 @@ class Scoring implements ScoringContract
 
     /**
      * Calculates a score for UV
-     * 
+     *
      * @return uvScore
      */
     public function uvScore()
@@ -321,7 +321,7 @@ class Scoring implements ScoringContract
 
     /**
      * Calculates a score for CO2
-     * 
+     *
      * @return co2Score
      */
     public function co2Score()
@@ -349,7 +349,7 @@ class Scoring implements ScoringContract
 
     /**
      * Calculates a score for humidity
-     * 
+     *
      * @return humidityScore
      */
     public function humidityScore()
@@ -368,7 +368,7 @@ class Scoring implements ScoringContract
 
     /**
      * Calculates a score for noise
-     * 
+     *
      * @return noiseScore
      */
     public function noiseScore()
@@ -395,7 +395,7 @@ class Scoring implements ScoringContract
 
     /**
      * Calculates a score for lux
-     * 
+     *
      * @return lightScore
      */
     public function luxScore()

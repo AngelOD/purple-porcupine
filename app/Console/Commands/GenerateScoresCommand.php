@@ -102,7 +102,7 @@ class GenerateScoresCommand extends Command
             $score->visual_score = $scores['visual'] / $entryCount;
             $score->sound_score = $scores['sound'] / $entryCount;
             $score->temp_hum_score = $scores['temp_hum'] / $entryCount;
-            $score->end_time = TimeHelper::carbonToNanoTime($endTime);
+            $score->end_time = TimeHelper::carbonToNanoTime($endTime->copy()->setTime($endTime->hour, 0, 0));
             $score->interval = $intervalSecs;
 
             $room->scores()->save($score);

@@ -26,7 +26,7 @@ class GenerateAllScoresCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Resets all scores and recalculates all of them.';
 
     /**
      * Create a new command instance.
@@ -45,6 +45,12 @@ class GenerateAllScoresCommand extends Command
      */
     public function handle()
     {
+        if (!$this->confirm('WARNING! This will remove and recalculate all scores. Are you sure?')) {
+            $this->info('Cancelling execution.');
+            return 0;
+        }
+
+        $this->info('Removing all scores from DB.');
         DB::table('scores')->delete();
         DB::table('scores')->truncate();
 
@@ -67,19 +73,28 @@ class GenerateAllScoresCommand extends Command
             );
 
             if (count($sensorData) === 0) {
+                $this->info('No sensor data found.');
                 continue;
             }
 
+            $now = Carbon::now('Europe/Copenhagen');
+            $skipped = 0;
             $scoreLists = [];
 
             foreach ($sensorData as $entry) {
                 $curDate = $entry['timestamp']->copy();
-                $index = $curDate->toDateString();
+                $hour = $curDate->hour;
+                $index = sprintf('%s-%d', $curDate->toDateString(), $hour + 1);
 
-                if ($curDate->hour <= 8 || $curDate->hour >= 16) { continue; }
+                if ($hour < 8 || $hour >= 16) {
+                    $skipped++;
+                    continue;
+                }
+                if ($curDate->isToday() && $hour === $now->hour) { continue; }
 
                 if (!array_key_exists($index, $scoreLists)) {
                     $scoreLists[$index] = [
+                        'date' => $curDate->copy()->setTimezone('Europe/Copenhagen')->setTime($hour + 1, 0, 0),
                         'count' => 0,
                         'total' => 0,
                         'iaq' => 0,
@@ -108,50 +123,37 @@ class GenerateAllScoresCommand extends Command
                 $scoreLists[$index]['temp_hum'] += $scoring->tempHumScore();
             }
 
-            // ========================================== //
+            $this->info(
+                sprintf(
+                    'Found %d sets of data. Skipped %d entries. Storing scores in DB...',
+                    count($scoreLists),
+                    $skipped
+                )
+            );
 
-            $scores = [
-                'count' => 0,
-                'total' => 0,
-                'iaq' => 0,
-                'visual' => 0,
-                'sound' => 0,
-                'temp_hum' => 0
-            ];
+            $pgBar = $this->output->createProgressBar(count($scoreLists));
 
-            foreach ($sensorData as $entry) {
-                $scoring->updateAllClassifications(
-                    $entry['uv'],
-                    $entry['light'],
-                    $entry['voc'],
-                    $entry['temperature'],
-                    $entry['co2'],
-                    $entry['noise'],
-                    $entry['humidity'],
-                    $endTime
-                );
+            foreach ($scoreLists as $scoreEntry) {
+                $entryCount = $scoreEntry['count'];
+                $entryEndTime = $scoreEntry['date'];
 
-                $scores['count']++;
-                $scores['total'] += $scoring->totalScore(RoomHelper::CALCULATIONS_PER_DAY);
-                $scores['iaq'] += $scoring->iaqScore();
-                $scores['visual'] += $scoring->visualScore();
-                $scores['sound'] += $scoring->soundScore();
-                $scores['temp_hum'] += $scoring->tempHumScore();
+                $score = Score::make();
+                $score->total_score = $scoreEntry['total'] / $entryCount;
+                $score->iaq_score = $scoreEntry['iaq'] / $entryCount;
+                $score->visual_score = $scoreEntry['visual'] / $entryCount;
+                $score->sound_score = $scoreEntry['sound'] / $entryCount;
+                $score->temp_hum_score = $scoreEntry['temp_hum'] / $entryCount;
+                $score->end_time = TimeHelper::carbonToNanoTime($entryEndTime);
+                $score->interval = $intervalSecs;
+
+                $room->scores()->save($score);
+
+                $pgBar->advance();
             }
 
-            $entryCount = $scores['count'];
-            $score = Score::make();
-            $score->total_score = $scores['total'] / $entryCount;
-            $score->iaq_score = $scores['iaq'] / $entryCount;
-            $score->visual_score = $scores['visual'] / $entryCount;
-            $score->sound_score = $scores['sound'] / $entryCount;
-            $score->temp_hum_score = $scores['temp_hum'] / $entryCount;
-            $score->end_time = TimeHelper::carbonToNanoTime($endTime);
-            $score->interval = $intervalSecs;
-
-            $room->scores()->save($score);
-
-            $this->info(sprintf('%s: %f', $room->internal_id, $score->total_score));
+            $pgBar->finish();
+            $this->info('');
+            $this->info('');
         }
     }
 }

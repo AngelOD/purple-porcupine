@@ -25,7 +25,7 @@ class GenerateScoresCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Generates latest set of scores for all rooms.';
 
     /**
      * Create a new command instance.
@@ -56,7 +56,7 @@ class GenerateScoresCommand extends Command
 
         foreach ($rooms as $room) {
             $sensorData = $scd->getFullDataset(
-                $room->sensorClusters->map(function ($e) { return $e->node_mac_address; }),
+                $room->sensorClusters->map(function ($e) { return $e->node_mac_address; })->toArray(),
                 $startTime,
                 $endTime,
                 $interval

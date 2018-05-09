@@ -297,6 +297,7 @@ class Scoring implements ScoringContract
         {
             $score = 100;
         }
+		if($this->temperatureClassification == 2 || $this->temperatureClassification == 4)
         return $score;
     }
 

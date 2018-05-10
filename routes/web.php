@@ -18,6 +18,11 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/room', 'HomeController@addRoom')->name('room');
+Route::get('/room/add', 'RoomController@index')->name('room');
 
 Route::get('/test/{roomID}', 'ChartController@test');
+
+Route::post('/room/add', 'RoomController@store')->name('room');
+
+Route::get('/sensor/add', 'SensorController@index')->name('sensor');
+Route::post('/sensor/add', 'SensorController@store')->name('sensor');

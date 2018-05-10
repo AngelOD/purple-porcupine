@@ -13,7 +13,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->except(['addRoom']);
+        
     }
 
     /**
@@ -26,8 +26,4 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function addRoom()
-    {
-        return view('room');
-    }
 }

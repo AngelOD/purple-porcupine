@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Score;
+use App\SensorCluster;
 use Illuminate\Http\Request;
+use App\Room;
 
-class ScoreController extends Controller
+class SensorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,8 @@ class ScoreController extends Controller
      */
     public function index()
     {
-        //
+        $rooms = Room::get();
+        return view('sensor', ['rooms' => $rooms]);
     }
 
     /**
@@ -35,16 +37,24 @@ class ScoreController extends Controller
      */
     public function store(Request $request)
     {
-        
+        if($request->has('room-id') && $request->has('mac-address'))
+        {
+            $sensor = SensorCluster::make();
+            $sensor->node_mac_address = $request->input('mac-address');
+            $sensor->room_id = $request->input('room-id');
+            
+            $sensor->save();
+        }
+        return redirect('sensor/add')->with('status', 'Sensor saved');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Score  $score
+     * @param  \App\SensorCluster  $sensorCluster
      * @return \Illuminate\Http\Response
      */
-    public function show(Score $score)
+    public function show(SensorCluster $sensorCluster)
     {
         //
     }
@@ -52,10 +62,10 @@ class ScoreController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Score  $score
+     * @param  \App\SensorCluster  $sensorCluster
      * @return \Illuminate\Http\Response
      */
-    public function edit(Score $score)
+    public function edit(SensorCluster $sensorCluster)
     {
         //
     }
@@ -64,10 +74,10 @@ class ScoreController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Score  $score
+     * @param  \App\SensorCluster  $sensorCluster
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Score $score)
+    public function update(Request $request, SensorCluster $sensorCluster)
     {
         //
     }
@@ -75,10 +85,10 @@ class ScoreController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Score  $score
+     * @param  \App\SensorCluster  $sensorCluster
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Score $score)
+    public function destroy(SensorCluster $sensorCluster)
     {
         //
     }

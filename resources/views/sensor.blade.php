@@ -68,24 +68,28 @@
     <body>
         <div class="content">
             <div class="title m-b-md">
-                Add Room
+                Add Sensor
             </div>
-                <p class="lead">Fill out the form to add a new room</p>
-            <form class="form-horizontal" method="POST" action="{{ action('RoomController@store') }}">
+                <p class="lead">Fill out the form to add a new sensor to a room</p>
+            <form class="form-horizontal" method="POST" action="{{ action('SensorController@store') }}">
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label" for="room-name">Name of room</label>
+                    <label class="col-sm-2 col-form-label" for="mac-address">Name of room</label>
                     <div class="col-sm-10">
-                        <input name="room-name" type="text" class="form-control" id="room-name" placeholder="0.1.95" required>
+                        <input name="mac-address" type="text" class="form-control" id="mac-address" maxlength="10" placeholder="000000000A" required>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label" for="room-name-alt">Alternative name for room</label>
+                    <label class="col-sm-2 col-form-label" for="room-id">Room</label>
                     <div class="col-sm-10">
-                        <input name="room-name-alt" type="text" class="form-control" id="room-name-alt" placeholder="Auditorium" required>
+                        <select name="room-id" class="form-control" required>
+                            @foreach($rooms as $room)
+                                <option value="{{$room->id}}">{{$room->name . ' - ' . $room->alt_name}}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="form-group row-center">
-                    <button name="add-room-btn" type="submit" class="btn btn-primary">Add Room</button>
+                    <button name="add-sensor-btn" type="submit" class="btn btn-primary">Add Sensor</button>
                 </div>
                 <div class="form-group row-center">
                     @if (session('status'))

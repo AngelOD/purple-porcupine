@@ -15,7 +15,7 @@ class SensorController extends Controller
      */
     public function index()
     {
-        $rooms = Room::get();
+        $rooms = Room::orderby('name')->get();
         return view('sensor', ['rooms' => $rooms]);
     }
 

@@ -100,8 +100,7 @@ class SensorCluster implements SensorClusterContract
                         .'avg(tvoc) as tvoc'
                     )
                     ->where('node_mac_address', '=', $this->nodeMacAddress)
-                    ->where('timestamp_nano', '>', $times['start'])
-                    ->where('timestamp_nano', '<=', $times['end'])
+                    ->whereBetween('timestamp_nano', [$times['start'], $times['end']])
                     ->first();
 
         if (!empty($data)) {
@@ -173,8 +172,7 @@ class SensorCluster implements SensorClusterContract
         $intervalNano = TimeHelper::intervalToNanoInterval($interval);
         $dataset = DB::table('radio_datas')
                     ->whereIn('node_mac_address', $nodeMacAddresses)
-                    ->where('timestamp_nano', '>', $startTimeNano)
-                    ->where('timestamp_nano', '<=', $endTimeNano)
+                    ->whereBetween('timestamp_nano', [$startTimeNano, $endTimeNano])
                     ->orderBy('timestamp_nano', 'asc')
                     ->get();
 

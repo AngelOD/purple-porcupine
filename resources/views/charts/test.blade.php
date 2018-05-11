@@ -29,6 +29,7 @@
             </div>
           </div>
           <div id="last_day_co2_div"></div>
+          <div id="last_day_voc_div"></div>
           <div id="last_day_rest_div"></div>
         </div>
       </div>
@@ -36,5 +37,6 @@
   </div>
 </div>
 @linechart('LastDayCO2', 'last_day_co2_div')
+@linechart('LastDayVOC', 'last_day_voc_div')
 @linechart('LastDayRest', 'last_day_rest_div')
 @endsection

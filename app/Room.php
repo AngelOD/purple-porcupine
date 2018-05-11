@@ -3,8 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use SW802F18\Contracts\SensorCluster;
-use SW802F18\Helpers\Scoring;
+use SW802F18\Contracts\SensorCluster as SensorClusterContract;
+use SW802F18\Contracts\Scoring as ScoringContract;
 use Carbon\Carbon;
 use SW802F18\Helpers\TimeHelper;
 
@@ -22,11 +22,19 @@ class Room extends Model
     }
 
     /**
-     * 
+     *
      */
     public function scores()
     {
         return $this->hasMany('App\Score', 'room_id', 'id');
+    }
+
+    /**
+     *
+     */
+    public function getAccumulatedScoreAttribute()
+    {
+        return $this->scores()->sum('total_score');
     }
 
     /**
@@ -43,7 +51,7 @@ class Room extends Model
 
         foreach ($this->sensorClusters as $sc) {
             $scd = app()->makeWith(
-                SensorCluster::class,
+                SensorClusterContract::class,
                 [
                     'nodeMacAddress' => $sc->node_mac_address,
                     'endTime' => $this->sensorDataEndTimeValue,
@@ -77,7 +85,7 @@ class Room extends Model
     }
 
     /**
-     * 
+     *
      */
     public function setSensorDataIntervalAttribute($interval)
     {
@@ -85,7 +93,7 @@ class Room extends Model
     }
 
     /**
-     * 
+     *
      */
     public function setSensorDataEndTimeAttribute($endTime)
     {
@@ -98,38 +106,12 @@ class Room extends Model
      */
     public function getScoresForThisDayAttribute()
     {
-        $data = [];
-        $currentDay = Carbon::now();
-        $startNanoTime = TimeHelper::carbonToNanoTime($currentDay->copy()->startOfDay());
-        $endNanoTime = TimeHelper::carbonToNanoTime($currentDay->copy()->endOfDay());
-        $scores = $this->scores()->whereBetween('end_time', [$startNanoTime, $endNanoTime])->get();
-
-        if($scores->count() < 1)
-        {
-            return $data;
-        }
-
-        foreach($scores as $score)
-        {
-            $data[] = [
-                'room_id' => $score->room_id,
-                'id' => $score->id,
-                'end_time' => $score->end_time,
-                'interval' => $score->interval,
-                'total_score' => $score->total_score,
-                'IAQ_score' => $score->IAQ_score,
-                'sound_score' => $score->sound_score,
-                'temp_hum_score' => $score->temp_hum_score,
-                'visual_score' => $score->visual_score,
-            ];
-        }
-
-        return $data;
+        return $this->scores()->today()->get()->toArray();
     }
 
     /**
      * Sets the scores based on the values from the parameters
-     * @param int Pulls per day. 
+     * @param int Pulls per day.
      */
     public function addScore($pullsPerDay)
     {
@@ -140,22 +122,22 @@ class Room extends Model
             'seconds' => 0,
         ]);
         $this->setSensorDataEndTimeAttribute(Carbon::now());
-        
+
         $data = $this->averageSensorData;
-        $voc = $data['voc']; 
-        $co2 = $data['co2']; 
-        $noise = $data['noise']; 
-        $light = $data['light']; 
-        $temperature = $data['temperature']; 
-        $humidity  = $data['humidity']; ; 
+        $voc = $data['voc'];
+        $co2 = $data['co2'];
+        $noise = $data['noise'];
+        $light = $data['light'];
+        $temperature = $data['temperature'];
+        $humidity  = $data['humidity']; ;
         $uv = $data['uv']; ;
-        
-        $scoring = new Scoring();
+
+        $scoring = app()->make(ScoringContract::class);
         $scoring->updateAllClassifications($uv, $light, $voc, $temperature, $co2, $noise, $humidity, $this->sensorDataEndTimeValue);
 
-        $score = Score::make(); 
+        $score = Score::make();
         $score->total_score = $scoring->totalScore($pullsPerDay);
-        $score->IAQ_score = $scoring->IAQScore();
+        $score->iaq_score = $scoring->iaqScore();
         $score->visual_score = $scoring->visualScore();
         $score->sound_score = $scoring->soundScore();
         $score->temp_hum_score = $scoring->tempHumScore();

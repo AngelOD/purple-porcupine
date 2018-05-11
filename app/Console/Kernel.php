@@ -26,6 +26,11 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        $schedule->command('generate:scores')
+                ->weekdays()
+                ->hourly()
+                ->timezone('Europe/Copenhagen')
+                ->between('9:00', '16:00');
     }
 
     /**

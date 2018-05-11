@@ -9,6 +9,7 @@ use Carbon\Carbon;
 
 class RoomHelper
 {
+    const CALCULATIONS_PER_DAY = 8;
     const CHARACTERS = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
 
     /**

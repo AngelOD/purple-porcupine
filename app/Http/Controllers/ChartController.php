@@ -23,7 +23,7 @@ class ChartController extends Controller
         $endTime = Carbon::now();
         $startTime = $endTime->copy()->subDay();
         $sensorData = $scd->getFullDataset(
-            $scs->map(function ($elem) { return $elem->node_mac_address; }),
+            $scs->map(function ($elem) { return $elem->node_mac_address; })->toArray(),
             $startTime,
             $endTime,
             ['minutes' => 10]
@@ -33,11 +33,14 @@ class ChartController extends Controller
         $lastDayCO2->addDateTimeColumn('DateTime')
                 ->addNumberColumn('CO2');
 
+        $lastDayVOC = Lava::DataTable();
+        $lastDayVOC->addDateTimeColumn('DateTime')
+                ->addNumberColumn('VOC');
+
         $lastDayRest = Lava::DataTable();
         $lastDayRest->addDateTimeColumn('DateTime')
                 ->addNumberColumn('Humidity')
-                ->addNumberColumn('Temperature')
-                ->addNumberColumn('VOC');
+                ->addNumberColumn('Temperature');
 
         foreach ($sensorData as $entry) {
             $lastDayCO2->addRow([
@@ -45,11 +48,15 @@ class ChartController extends Controller
                 $entry['co2'],
             ]);
 
+            $lastDayVOC->addRow([
+                $entry['timestamp']->toDateTimeString(),
+                $entry['voc'],
+            ]);
+
             $lastDayRest->addRow([
                 $entry['timestamp']->toDateTimeString(),
                 $entry['humidity'],
                 $entry['temperature'],
-                $entry['voc'],
             ]);
         }
 
@@ -57,6 +64,27 @@ class ChartController extends Controller
         $endTime->addHours(2);
 
         Lava::LineChart('LastDayCO2', $lastDayCO2, [
+            'title' => 'Last day for ' . $room->name . (!empty($room->alt_name) ? ' (' . $room->alt_name . ')' : ''),
+            'legend' => [
+                'position' => 'bottom'
+            ],
+            'hAxis' => [
+                'viewWindow' => [
+                    'min' => sprintf(
+                        "Date(%d, %d, %d, %d, %d, %d)",
+                        $startTime->year, $startTime->month - 1, $startTime->day,
+                        $startTime->hour, $startTime->minute, $startTime->second
+                    ),
+                    'max' => sprintf(
+                        "Date(%d, %d, %d, %d, %d, %d)",
+                        $endTime->year, $endTime->month - 1, $endTime->day,
+                        $endTime->hour, $endTime->minute, $endTime->second
+                    ),
+                ],
+            ],
+        ]);
+
+        Lava::LineChart('LastDayVOC', $lastDayVOC, [
             'title' => 'Last day for ' . $room->name . (!empty($room->alt_name) ? ' (' . $room->alt_name . ')' : ''),
             'legend' => [
                 'position' => 'bottom'

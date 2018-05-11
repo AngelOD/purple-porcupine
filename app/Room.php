@@ -32,6 +32,14 @@ class Room extends Model
     /**
      *
      */
+    public function getAccumulatedScoreAttribute()
+    {
+        return $this->scores()->sum('total_score');
+    }
+
+    /**
+     *
+     */
     public function getAverageSensorDataAttribute()
     {
         $counters = [];
@@ -98,33 +106,7 @@ class Room extends Model
      */
     public function getScoresForThisDayAttribute()
     {
-        $data = [];
-        $currentDay = Carbon::now();
-        $startNanoTime = TimeHelper::carbonToNanoTime($currentDay->copy()->startOfDay());
-        $endNanoTime = TimeHelper::carbonToNanoTime($currentDay->copy()->endOfDay());
-        $scores = $this->scores()->whereBetween('end_time', [$startNanoTime, $endNanoTime])->get();
-
-        if($scores->count() < 1)
-        {
-            return $data;
-        }
-
-        foreach($scores as $score)
-        {
-            $data[] = [
-                'room_id' => $score->room_id,
-                'id' => $score->id,
-                'end_time' => $score->end_time,
-                'interval' => $score->interval,
-                'total_score' => $score->total_score,
-                'iaq_score' => $score->iaq_score,
-                'sound_score' => $score->sound_score,
-                'temp_hum_score' => $score->temp_hum_score,
-                'visual_score' => $score->visual_score,
-            ];
-        }
-
-        return $data;
+        return $this->scores()->today()->get()->toArray();
     }
 
     /**

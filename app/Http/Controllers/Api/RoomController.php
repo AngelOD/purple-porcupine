@@ -19,16 +19,14 @@ class RoomController extends Controller
     public function index()
     {
         $data = [];
-
         $rooms = Room::get();
 
         foreach ($rooms as $room) {
-            $score = $room->scores()->latest()->first();
             $data[] = [
                 'id' => $room->internal_id,
                 'name' => $room->name,
                 'altName' => $room->alt_name,
-                'score' => (empty($score) ? 0 : $score->total_score),
+                'score' => $room->accumulatedScore,
             ];
         }
 
@@ -46,12 +44,12 @@ class RoomController extends Controller
         $room = Room::where('internal_id', '=', strtoupper($roomID))->first();
 
         if (empty($room)) { return response()->json('Invalid parameter data', 400); }
-        $score = $room->scores()->latest()->first();
+
         return response()->json([
             'id' => $room->internal_id,
             'name' => $room->name,
             'altName' => $room->alt_name,
-            'score' => (empty($score) ? 0 : $score->total_score),
+            'score' => $room->accumulatedScore,
         ], 200);
     }
 

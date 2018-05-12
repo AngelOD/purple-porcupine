@@ -86,7 +86,7 @@ class GenerateAllScoresCommand extends Command
                 $hour = $curDate->hour;
                 $index = sprintf('%s-%d', $curDate->toDateString(), $hour + 1);
 
-                if ($hour < 8 || $hour >= 16) {
+                if (!$curDate->isWeekday() || $hour < 8 || $hour >= 16) {
                     $skipped++;
                     continue;
                 }

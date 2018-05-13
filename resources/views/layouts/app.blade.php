@@ -34,7 +34,6 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -44,7 +43,7 @@
                             <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
                             <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
                         @else
-                            <li id="nav-item dropdown">
+                            <li class="nav-item dropdown">
                                 <a id="roomDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     Room <span class="caret"></span>
                                 </a>
@@ -52,6 +51,15 @@
                                     <a class="dropdown-item" href="{{ route('room.add') }}">Add a new Room</a>
                                 </div>
                             </li>
+
+                            <li class="nav-item dropdown">
+                                    <a id="sensorDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        Sensor <span class="caret"></span>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="sensorDropdown">
+                                        <a class="dropdown-item" href="{{ route('sensor.add') }}">Add a new Sensor</a>
+                                    </div>
+                                </li>
 
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

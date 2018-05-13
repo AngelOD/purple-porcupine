@@ -5,9 +5,17 @@ namespace App\Http\Controllers;
 use App\SensorCluster;
 use Illuminate\Http\Request;
 use App\Room;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Validation\Rule;
 
 class SensorController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -37,14 +45,35 @@ class SensorController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->has('room-id') && $request->has('mac-address'))
+        $sensors = SensorCluster::select('node_mac_address')->get();
+       
+        $macs = [];
+        foreach($sensors as $sensor)
         {
-            $sensor = SensorCluster::make();
-            $sensor->node_mac_address = $request->input('mac-address');
-            $sensor->room_id = $request->input('room-id');
-            
-            $sensor->save();
+            $macs[] = $sensor->node_mac_address;
         }
+
+        $rooms = Room::select('id')->get();
+        $room_ids = [];
+        foreach($rooms as $room)
+        {
+            $room_ids[] = $room->id;
+        }
+        $rules = [
+            'mac-address' => ['required', 'min:8', 'max:10', 'string', Rule::notIn($macs)],
+            'room-id' => ['required', 'min:1', 'integer', Rule::in($room_ids)],
+        ];
+        $validatedData = Validator::make($request->all(), $rules);
+        if($validatedData->fails())
+        {
+            return redirect('sensor/add')->withErrors($validatedData)->withInput();
+        }
+        $sensor = SensorCluster::make();
+        $sensor->node_mac_address = $request->input('mac-address');
+        $sensor->room_id = $request->input('room-id');
+        
+        $sensor->save();
+        
         return redirect('sensor/add')->with('status', 'Sensor saved');
     }
 

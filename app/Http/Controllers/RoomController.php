@@ -5,9 +5,17 @@ namespace App\Http\Controllers;
 use App\Room;
 use Illuminate\Http\Request;
 use SW802F18\Helpers\RoomHelper;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Validation\Rule;
 
 class RoomController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -36,16 +44,28 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->has('room-name'))
+        $room_names = [];
+        $rooms = Room::select('name')->get();
+        foreach($rooms as $room)
         {
-            $newRoom = Room::make();
-            $newRoom->internal_id = RoomHelper::getRandomRoomID();
-            $newRoom->name = $request->input('room-name');
-            $newRoom->alt_name = $request->input('room-name-alt');
-
-            $newRoom->save();
-            return redirect('room/add')->with('status', 'Room saved');
+            $room_names[] = $room->name;
         }
+        $rules = [
+            'room-name' => ['required', 'string', 'max:100', 'min:1', Rule::notIn($room_names)],
+            'room-name-alt' => ['required', 'string', 'max:100', 'min:1'], 
+        ];
+        $validatedData = Validator::make($request->all(), $rules);
+        if($validatedData->fails())
+        {
+            return redirect('room/add')->withErrors($validatedData)->withInput();
+        }
+        $newRoom = Room::make();
+        $newRoom->internal_id = RoomHelper::getRandomRoomID();
+        $newRoom->name = $request->input('room-name');
+        $newRoom->alt_name = $request->input('room-name-alt');
+
+        $newRoom->save();
+        return redirect('room/add')->with('status', 'Room saved');
     }
 
     /**
@@ -91,5 +111,13 @@ class RoomController extends Controller
     public function destroy(Room $room)
     {
         //
+    }
+
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'room-name' => 'required|string|max:100|min:1',
+            'room-name-alt' => 'required|string|max:100',
+        ]);
     }
 }

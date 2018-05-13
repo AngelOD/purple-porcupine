@@ -34,6 +34,11 @@
                 @if (session('status'))
             <label class="col-form-label">{{session('status')}}</label>
                 @endif
+                @if($errors->any())
+                @foreach($errors->all() as $error)
+                    <label class="alert-danger alert">{{$error}}</label>
+                @endforeach
+                @endif
             </div>
             {{ csrf_field() }}
         </form>

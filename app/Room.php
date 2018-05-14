@@ -117,8 +117,8 @@ class Room extends Model
     {
         $this->setSensorDataIntervalAttribute([
             'days' => 0,
-            'hours' => 1,
-            'minutes' => 0,
+            'hours' => 0,
+            'minutes' => 10,
             'seconds' => 0,
         ]);
         $this->setSensorDataEndTimeAttribute(Carbon::now());
@@ -144,8 +144,8 @@ class Room extends Model
         $score->end_time = TimeHelper::carbonToNanoTime($this->sensorDataEndTimeValue);
         $score->interval = TimeHelper::intervalToSeconds([
             'days' => 0,
-            'hours' => 1,
-            'minutes' => 0,
+            'hours' => 0,
+            'minutes' => 10,
             'seconds' => 0,
         ]);
 

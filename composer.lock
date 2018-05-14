@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8032676b48a6ff4d515955387b58db13",
+    "content-hash": "7181b75ad668a9306df145c8b55dc2c5",
     "packages": [
         {
             "name": "angelod/laravel-list-db",
@@ -1002,6 +1002,73 @@
                 "minimizer"
             ],
             "time": "2017-12-13T09:13:05+00:00"
+        },
+        {
+            "name": "influxdb/influxdb-php",
+            "version": "1.14.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/influxdata/influxdb-php.git",
+                "reference": "64c79de3f3e0e7f8c20b5fc51f50da8736767de9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/influxdata/influxdb-php/zipball/64c79de3f3e0e7f8c20b5fc51f50da8736767de9",
+                "reference": "64c79de3f3e0e7f8c20b5fc51f50da8736767de9",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.0",
+                "php": "^5.5 || ^7.0",
+                "symfony/event-dispatcher": "^2.0 || ^3.0 || ^4.0"
+            },
+            "require-dev": {
+                "codeclimate/php-test-reporter": "0.*",
+                "symfony/config": "~2.8|~3.0|~4.0",
+                "symfony/console": "~2.8|~3.0|~4.0",
+                "symfony/filesystem": "~2.8|~3.0|~4.0",
+                "symfony/phpunit-bridge": "^3.4 || ^4.0",
+                "symfony/stopwatch": "~2.8|~3.0|~4.0",
+                "symfony/yaml": "~2.8|~3.0|~4.0"
+            },
+            "suggest": {
+                "stefanotorresi/influxdb-php-async": "An asyncronous client for InfluxDB, implemented via ReactPHP."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "InfluxDB\\": "src/InfluxDB"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Gianluca Arbezzano",
+                    "email": "gianarb92@gmail.com"
+                },
+                {
+                    "name": "Daniel Martinez",
+                    "email": "danimartcas@hotmail.com"
+                },
+                {
+                    "name": "Stephen Hoogendijk",
+                    "email": "stephen@tca0.nl"
+                }
+            ],
+            "description": "InfluxDB client library for PHP",
+            "keywords": [
+                "client",
+                "influxdata",
+                "influxdb",
+                "influxdb class",
+                "influxdb client",
+                "influxdb library",
+                "time series"
+            ],
+            "time": "2018-01-03T13:09:43+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -3330,6 +3397,43 @@
             "description": "CssToInlineStyles is a class that enables you to convert HTML-pages/files into HTML-pages/files with inline styles. This is very useful when you're sending emails.",
             "homepage": "https://github.com/tijsverkoyen/CssToInlineStyles",
             "time": "2017-11-27T11:13:29+00:00"
+        },
+        {
+            "name": "tray-labs/laravel-influxdb",
+            "version": "1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tray-labs/laravel-influxdb.git",
+                "reference": "94b117ba9551d3a89e8858161c19ec8759a4db56"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tray-labs/laravel-influxdb/zipball/94b117ba9551d3a89e8858161c19ec8759a4db56",
+                "reference": "94b117ba9551d3a89e8858161c19ec8759a4db56",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^5.0",
+                "influxdb/influxdb-php": "^1.14"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TrayLabs\\InfluxDB\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tray Labs",
+                    "email": "dev@traylabs.com.br"
+                }
+            ],
+            "description": "A service made to provide, set up and use the library from influxdata influxphp in Laravel.",
+            "time": "2018-02-02T14:28:41+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

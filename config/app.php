@@ -151,6 +151,7 @@ return [
          * Package Service Providers...
          */
         Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
+        TrayLabs\InfluxDB\Providers\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -192,6 +193,7 @@ return [
         'File' => Illuminate\Support\Facades\File::class,
         'Gate' => Illuminate\Support\Facades\Gate::class,
         'Hash' => Illuminate\Support\Facades\Hash::class,
+        'InfluxDB' => TrayLabs\InfluxDB\Facades\InfluxDB::class,
         'Lang' => Illuminate\Support\Facades\Lang::class,
         'Lava' => Khill\Lavacharts\Laravel\LavachartsFacade::class,
         'Log' => Illuminate\Support\Facades\Log::class,

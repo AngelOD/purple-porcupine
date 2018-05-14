@@ -4,7 +4,8 @@ namespace App\Providers;
 
 use SW802F18\Contracts\Scoring as ScoringContract;
 use SW802F18\Contracts\SensorCluster as SensorClusterContract;
-use SW802F18\Database\SensorCluster;
+use SW802F18\Database\SensorCluster as MySqlSensorCluster;
+use SW802F18\Influx\SensorCluster as InfluxSensorCluster;
 use SW802F18\Helpers\Scoring;
 use Illuminate\Support\ServiceProvider;
 
@@ -33,7 +34,11 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(SensorClusterContract::class, function($app, $vars) {
-            $sc = new SensorCluster();
+            if (config('influxdb.use')) {
+                $sc = new InfluxSensorCluster();
+            } else {
+                $sc = new MySqlSensorCluster();
+            }
 
             if (!array_key_exists('skipInit', $vars) || $vars['skipInit'] !== true) {
                 if (!array_key_exists('endTime', $vars)) { $vars['endTime'] = null; }

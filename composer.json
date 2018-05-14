@@ -14,7 +14,8 @@
         "laravel/framework": "5.6.*",
         "laravel/tinker": "^1.0",
         "lcobucci/jwt": "^3.2",
-        "nexmo/client": "^1.2"
+        "nexmo/client": "^1.2",
+        "tray-labs/laravel-influxdb": "*"
     },
     "require-dev": {
         "filp/whoops": "^2.0",

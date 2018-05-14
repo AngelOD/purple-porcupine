@@ -3,6 +3,7 @@
 namespace SW802F18\Influx;
 
 use DB;
+use InfluxDB;
 use Carbon\Carbon;
 use SW802F18\Contracts\SensorCluster as SensorClusterContract;
 use SW802F18\Helpers\TimeHelper;
@@ -92,14 +93,13 @@ class SensorCluster implements SensorClusterContract
         ];
 
         $times = $this->getNanoTimes();
-        $resultSet = InfluxDB::query(
-            'SELECT '
+        $q = 'SELECT '
             .implode(', ', array_map(function ($e) { return sprintf('MEAN("%1$s") AS "%1$s"', $e); }, $fields))
             .' FROM radio_datas '
-            .' WHERE "node_mac_address" = ' . $this->nodeMacAddress
+            .' WHERE "node_mac_address" = \'' . $this->nodeMacAddress . '\''
             .' AND time > ' . $times['start']
-            .' AND time <=' . $times['end']
-        );
+            .' AND time <=' . $times['end'];
+        $resultSet = InfluxDB::query($q);
         $data = $resultSet->getPoints();
 
         if (!empty($data)) {
@@ -171,14 +171,13 @@ class SensorCluster implements SensorClusterContract
         $startTimeNano = TimeHelper::carbonToNanoTime($startTime);
         $endTimeNano = TimeHelper::carbonToNanoTime($endTime);
         $intervalNano = TimeHelper::intervalToNanoInterval($interval);
-        $resultSet = InfluxDB::query(
-            'SELECT *'
+        $q = 'SELECT *'
             .' FROM radio_datas'
-            .' WHERE (' . implode(' OR ', array_map(function ($e) { return sprintf('"node_mac_address" = %s', $e); }, $nodeMacAddresses)) . ')'
+            .' WHERE (' . implode(' OR ', array_map(function ($e) { return sprintf('"node_mac_address" = \'%s\'', $e); }, $nodeMacAddresses)) . ')'
             .' AND time > ' . $startTimeNano
             .' AND time <= ' . $endTimeNano
-            .' ORDER BY time ASC'
-        );
+            .' ORDER BY time ASC';
+        $resultSet = InfluxDB::query($q);
         $dataset = $resultSet->getPoints();
 
         if (count($dataset) < 1) { return $result; }

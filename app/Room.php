@@ -106,9 +106,7 @@ class Room extends Model
      */
     public function getScoresForThisDayAttribute()
     {
-        // TODO: Revert when done testing
-        //return $this->scores()->today()->get()->toArray();
-        return $this->scores()->latest()->take(8)->get()->toArray();
+        return $this->scores()->today()->get()->toArray();
     }
 
     /**

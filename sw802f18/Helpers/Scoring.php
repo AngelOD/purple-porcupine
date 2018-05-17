@@ -7,7 +7,7 @@ use SW802F18\Contracts\Scoring as ScoringContract;
 
 /**
  * This class has functions for calculating Classifications for sensors and a total score.
- * Most functions are actually more like classifiers.
+ * Most functions are actually more like classifiers.  
  */
 class Scoring implements ScoringContract
 {

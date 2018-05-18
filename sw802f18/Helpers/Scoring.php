@@ -130,8 +130,8 @@ class Scoring implements ScoringContract
      */
     private function uvClassification($sensorValue)
     {
-        $lower = [0, 1, 2, 3, 5];
-        $upper = [1, 2, 3, 5, 15];
+        $lower = [0, 3, 4, 5, 6];
+        $upper = [3, 4, 5, 6, 15];
         $this->uvClassification = $this->classification($sensorValue, $lower, $upper);
     }
 

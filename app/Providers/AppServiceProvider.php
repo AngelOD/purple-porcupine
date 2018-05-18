@@ -40,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
                 $sc = new MySqlSensorCluster();
             }
 
-            if (!array_key_exists('skipInit', $vars) || $vars['skipInit'] !== true) {
+            if (array_key_exists('nodeMacAddress', $vars)) {
                 if (!array_key_exists('endTime', $vars)) { $vars['endTime'] = null; }
                 if (!array_key_exists('interval', $vars)) { $vars['interval'] = null; }
 

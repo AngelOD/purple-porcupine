@@ -7,7 +7,7 @@ use SW802F18\Contracts\Scoring as ScoringContract;
 
 /**
  * This class has functions for calculating Classifications for sensors and a total score.
- * Most functions are actually more like classifiers.
+ * Most functions are actually more like classifiers.  
  */
 class Scoring implements ScoringContract
 {
@@ -297,7 +297,10 @@ class Scoring implements ScoringContract
         {
             $score = 100;
         }
-		if($this->temperatureClassification == 2 || $this->temperatureClassification == 4)
+        if($this->temperatureClassification == 2 || $this->temperatureClassification == 4)
+        {
+            $score = 50;
+        }
         return $score;
     }
 
@@ -315,7 +318,7 @@ class Scoring implements ScoringContract
         }
         if($this->uvClassification == 2)
         {
-            $score = 80;
+            $score = 75;
         }
         return $score;
     }

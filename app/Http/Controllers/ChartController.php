@@ -18,7 +18,7 @@ class ChartController extends Controller
         $scs = $room->sensorClusters;
         if (empty($scs)) { return response('Error!', 400); }
 
-        $scd = app()->makeWith(SensorCluster::class, ['skipInit' => true]);
+        $scd = app()->make(SensorCluster::class);
 
         $endTime = Carbon::now();
         $startTime = $endTime->copy()->subDay();

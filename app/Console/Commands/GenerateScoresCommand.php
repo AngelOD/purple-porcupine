@@ -45,7 +45,7 @@ class GenerateScoresCommand extends Command
     public function handle()
     {
         $interval       = ['minutes' => 5];
-        $scd            = app()->makeWith(SensorClusterContract::class, ['skipInit' => true]);
+        $scd            = app()->make(SensorClusterContract::class);
         $rooms          = Room::with('sensorClusters')->get();
         $startTime      = Carbon::now()->startOfDay();
         $endTime        = Carbon::now();

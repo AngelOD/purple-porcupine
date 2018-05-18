@@ -57,8 +57,8 @@ class Scoring implements ScoringContract
      */
     private function noiseClassification($sensorValue)
     {
-        $lower = [0, 45, 60, 67, 75];
-        $upper = [45, 60, 67, 75, 120];
+        $lower = [0, 60, 65, 70, 75];
+        $upper = [60, 65, 70, 75, 120];
         $this->noiseClassification = $this->classification($sensorValue, $lower, $upper);
     }
 

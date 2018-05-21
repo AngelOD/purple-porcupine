@@ -320,6 +320,14 @@ class Scoring implements ScoringContract
         {
             $score = 75;
         }
+        if($this->uvClassification == 3)
+        {
+            $score = 50;
+        }
+        if($this->uvClassification == 4)
+        {
+            $score = 25;
+        }
         return $score;
     }
 

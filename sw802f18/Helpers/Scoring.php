@@ -7,10 +7,21 @@ use SW802F18\Contracts\Scoring as ScoringContract;
 
 /**
  * This class has functions for calculating Classifications for sensors and a total score.
- * Most functions are actually more like classifiers.  
+ * Most functions are actually more like classifiers.
  */
 class Scoring implements ScoringContract
 {
+    const SOUND_WEIGHT          = 25,
+            VISUAL_WEIGHT       = 22,
+            IAQ_WEIGHT          = 23,
+            TEMP_HUM_WEIGHT     = 30,
+            TEMPERATURE_WEIGHT  = 1,
+            HUMIDITY_WEIGHT     = 1,
+            UV_WEIGHT           = 1,
+            LUX_WEIGHT          = 1,
+            VOC_WEIGHT          = 1,
+            CO2_WEIGHT          = 1;
+
     private $co2Classification, $temperatureClassification,
             $vocClassification, $lightClassification,
             $noiseClassification, $humidityClassification,
@@ -179,10 +190,15 @@ class Scoring implements ScoringContract
      */
     public function totalScore($scorePulls = 1)
     {
-        $sound = $this->soundScore()*0.25;
-        $visual = $this->visualScore()*0.22;
-        $iaq = $this->iaqScore()*0.3;
-        $tempHum = $this->tempHumScore()*0.23;
+        $modifier =
+            1 / (self::SOUND_WEIGHT
+            + self::VISUAL_WEIGHT
+            + self::IAQ_WEIGHT
+            + self::TEMP_HUM_WEIGHT);
+        $sound = $this->soundScore() * self::SOUND_WEIGHT * $modifier;
+        $visual = $this->visualScore() * self::VISUAL_WEIGHT * $modifier;
+        $iaq = $this->iaqScore() * self::IAQ_WEIGHT * $modifier;
+        $tempHum = $this->tempHumScore() * self::TEMP_HUM_WEIGHT * $modifier;
         return ($iaq + $visual + $sound + $tempHum) / $scorePulls;
     }
 
@@ -198,8 +214,10 @@ class Scoring implements ScoringContract
         {
             return $totalScore;
         }
-        $tempScore = $this->temperatureScore()*0.5;
-        $humidity = $this->humidityScore()*0.5;
+
+        $modifier = 1 / (self::TEMPERATURE_WEIGHT + self::HUMIDITY_WEIGHT);
+        $tempScore = $this->temperatureScore() * self::TEMPERATURE_WEIGHT * $modifier;
+        $humidity = $this->humidityScore() * self::HUMIDITY_WEIGHT * $modifier;
         $totalScore = $tempScore + $humidity;
         return $totalScore;
     }
@@ -233,8 +251,10 @@ class Scoring implements ScoringContract
         {
             return $totalScore; //If we don't have the classifications, then we can't calculate a totalScore, so 0 is returned
         }
-        $uv = $this->uvScore()*0.5;
-        $lux = $this->luxScore()*0.5;
+
+        $modifier = 1 / (self::UV_WEIGHT + self::LUX_WEIGHT);
+        $uv = $this->uvScore() * self::UV_WEIGHT * $modifier;
+        $lux = $this->luxScore() * self::LUX_WEIGHT * $modifier;
         $totalScore = $uv + $lux;
         return $totalScore;
     }
@@ -252,8 +272,10 @@ class Scoring implements ScoringContract
         {
             return $totalScore;
         }
-        $vocScore = $this->vocScore()*0.5;
-        $co2Score = $this->co2Score()*0.5;
+
+        $modifier = 1 / (self::VOC_WEIGHT + self::CO2_WEIGHT);
+        $vocScore = $this->vocScore() * self::VOC_WEIGHT * $modifier;
+        $co2Score = $this->co2Score() * self::CO2_WEIGHT * $modifier;
         $totalScore = $vocScore + $co2Score;
         return $totalScore;
     }

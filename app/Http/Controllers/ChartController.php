@@ -26,7 +26,7 @@ class ChartController extends Controller
             $scs->map(function ($elem) { return $elem->node_mac_address; })->toArray(),
             $startTime,
             $endTime,
-            ['minutes' => 10]
+            ['minutes' => 5]
         );
 
         $lastDayCO2 = Lava::DataTable();

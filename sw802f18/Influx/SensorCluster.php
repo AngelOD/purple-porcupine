@@ -79,7 +79,7 @@ class SensorCluster implements SensorClusterContract
         ];
 
         if (empty($interval) || !is_array($interval)) {
-            $this->interval = array_merge($emptyInterval, ['minutes' => 10]);
+            $this->interval = array_merge($emptyInterval, ['minutes' => 5]);
             return;
         }
 

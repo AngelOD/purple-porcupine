@@ -60,7 +60,7 @@ class GenerateAllScoresCommand extends Command
         $startTime      = Carbon::createFromTimestamp(0);
         $endTime        = Carbon::now();
         $scoring        = app()->make(ScoringContract::class);
-        $intervalSecs   = TimeHelper::intervalToSeconds(['minutes' => 5]);
+        $intervalSecs   = TimeHelper::intervalToSeconds($interval);
 
         foreach ($rooms as $room) {
             $this->info(sprintf('Generating all scores for %s...', $room->internal_id));

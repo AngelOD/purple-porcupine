@@ -50,7 +50,7 @@ class GenerateScoresCommand extends Command
         $startTime      = Carbon::now()->startOfDay();
         $endTime        = Carbon::now();
         $scoring        = app()->make(ScoringContract::class);
-        $intervalSecs   = TimeHelper::intervalToSeconds(['minutes' => 5]);
+        $intervalSecs   = TimeHelper::intervalToSeconds($interval);
 
         $this->info('Generating scores for...');
 

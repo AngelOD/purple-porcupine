@@ -68,6 +68,11 @@ class RoomController extends Controller
 
         $data = $room->averageSensorData;
 
+        if(empty($data))
+        {
+            return response()->json('Unable to find room.', 400);
+        }
+        
         switch($sensor)
         {
             case 'all':

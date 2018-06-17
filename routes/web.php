@@ -40,3 +40,5 @@ Route::get('/test/{roomID}', 'ChartController@test');
 
 Route::get('/sensor/add', 'SensorController@index')->name('sensor.add');
 Route::post('/sensor/add', 'SensorController@store');
+
+Route::get('/exam', 'ExamController@index');

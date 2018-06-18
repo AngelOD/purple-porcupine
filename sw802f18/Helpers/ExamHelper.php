@@ -130,6 +130,8 @@ class ExamHelper
         $now = Carbon::now();
         $maxCount = ($isFuture ? 5 : 3);
 
+        if (!$isFuture) { $now->addMinute(); }
+
         $points = [];
         for ($i = 0; $i < $maxCount; $i++) {
             if ($isFuture) {

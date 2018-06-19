@@ -39,11 +39,11 @@ class ExamController extends Controller
                 break;
 
             case 2:
-                ExamHelper::setHorribleRoom($data['t'], $data['h']);
+                ExamHelper::setupHorribleRoom($data['t'], $data['h']);
                 break;
         }
 
-        if ($data['ts'] > 0) {
+        if ($data['ts'] >= 0) {
             switch ($data['ts']) {
                 case 0:
                     ExamHelper::makeRoomGood();

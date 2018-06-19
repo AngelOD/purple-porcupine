@@ -128,7 +128,7 @@ class ExamHelper
     {
         $room = ($isFuture ? self::getRoom() : self::clearRoomSensorData());
         $now = Carbon::now();
-        $maxCount = ($isFuture ? 5 : 3);
+        $maxCount = ($isFuture ? 30 : 5);
 
         if (!$isFuture) { $now->addMinute(); }
 

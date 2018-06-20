@@ -110,7 +110,7 @@ class ExamHelper
      */
     public static function makeRoomBad($temperatureStatus, $humidityStatus)
     {
-        return self::setBadRoom($temperatureStatus, $humidityStatus, true);
+        return self::setupBadRoom($temperatureStatus, $humidityStatus, true);
     }
 
     /**
@@ -118,7 +118,7 @@ class ExamHelper
      */
     public static function makeRoomHorrible($temperatureStatus, $humidityStatus)
     {
-        return self::setHorribleRoom($temperatureStatus, $humidityStatus, true);
+        return self::setupHorribleRoom($temperatureStatus, $humidityStatus, true);
     }
 
     /**
@@ -128,7 +128,14 @@ class ExamHelper
     {
         $room = ($isFuture ? self::getRoom() : self::clearRoomSensorData());
         $now = Carbon::now();
-        $maxCount = ($isFuture ? 30 : 5);
+        $maxCount = ($isFuture ? 30 : 60);
+        $origData = $data;
+        $dbData = self::getLatestSensorData();
+        $loopCount = 1;
+
+        if ($isFuture) {
+            $data = self::calculateNewData($dbData, $origData, $loopCount);
+        }
 
         if (!$isFuture) { $now->addMinute(); }
 
@@ -170,6 +177,11 @@ class ExamHelper
                     ],
                     $now->timestamp
                 );
+
+            if ($isFuture && $i > 0 && $i < 20 && $i % 5 === 0) {
+                $loopCount++;
+                $data = self::calculateNewData($dbData, $origData, $loopCount);
+            }
         }
 
         $res = InfluxDB::writePoints($points, InfluxDB\Database::PRECISION_SECONDS);
@@ -189,5 +201,47 @@ class ExamHelper
         InfluxDB::query($q);
 
         return $room;
+    }
+
+    /**
+     *
+     */
+    protected static function getLatestSensorData()
+    {
+        $room = self::getRoom();
+        $sc = $room->sensorClusters[0];
+
+        $q = 'SELECT * FROM "radio_datas" '
+            .'WHERE "node_mac_address" = \'' . $sc->node_mac_address . '\' '
+            .'ORDER BY time DESC '
+            .'LIMIT 1';
+        $resultSet = InfluxDB::query($q);
+        $data = $resultSet->getPoints();
+
+        if (!empty($data)) {
+            return $data[0];
+        }
+
+        return [];
+    }
+
+    /**
+     *
+     */
+    protected static function calculateNewData($from, $to, $index, $count = 4)
+    {
+        $newData = [];
+
+        foreach ($from as $key => $value) {
+            if (!array_key_exists($key, $to)) { continue; }
+
+            if ($to[$key] !== $value) {
+                $newData[$key] = (int)($value + floor((($to[$key] - $value) / $count) * $index));
+            } else {
+                $newData[$key] = $value;
+            }
+        }
+
+        return $newData;
     }
 }

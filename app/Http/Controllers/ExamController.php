@@ -21,42 +21,44 @@ class ExamController extends Controller
     public function update(Request $request)
     {
         $data = [
-            's' => $request->input('s', 0),
+            'c' => $request->input('c', 0),
             'h' => $request->input('h', 1),
+            's' => $request->input('s', 0),
             't' => $request->input('t', 1),
             'v' => $request->input('v', 0),
-            'ts' => $request->input('ts', -1),
+            'tc' => $request->input('tc', 0),
             'th' => $request->input('th', 1),
+            'ts' => $request->input('ts', -1),
             'tt' => $request->input('tt', 1),
             'tv' => $request->input('tv', 0),
         ];
 
         switch ($data['s']) {
             case 0:
-                ExamHelper::setupGoodRoom();
+                ExamHelper::setupGoodRoom($data['c'], $data['v']);
                 break;
 
             case 1:
-                ExamHelper::setupBadRoom($data['t'], $data['h'], $data['v']);
+                ExamHelper::setupBadRoom($data['t'], $data['h'], $data['c'], $data['v']);
                 break;
 
             case 2:
-                ExamHelper::setupHorribleRoom($data['t'], $data['h'], $data['v']);
+                ExamHelper::setupHorribleRoom($data['t'], $data['h'], $data['c'], $data['v']);
                 break;
         }
 
         if ($data['ts'] >= 0) {
             switch ($data['ts']) {
                 case 0:
-                    ExamHelper::makeRoomGood();
+                    ExamHelper::makeRoomGood($data['tc'], $data['tv']);
                     break;
 
                 case 1:
-                    ExamHelper::makeRoomBad($data['tt'], $data['th'], $data['tv']);
+                    ExamHelper::makeRoomBad($data['tt'], $data['th'], $data['tc'], $data['tv']);
                     break;
 
                 case 2:
-                    ExamHelper::makeRoomHorrible($data['tt'], $data['th'], $data['tv']);
+                    ExamHelper::makeRoomHorrible($data['tt'], $data['th'], $data['tc'], $data['tv']);
                     break;
             }
         }

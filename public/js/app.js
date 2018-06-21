@@ -47234,7 +47234,7 @@ exports = module.exports = __webpack_require__(42)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -47867,6 +47867,39 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'vue-world-domination',
@@ -47876,6 +47909,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       buttons: {
+        co2Modifiers: [{
+          id: 0,
+          title: 'Just Right'
+        }, {
+          id: 1,
+          title: 'Dizzy'
+        }, {
+          id: 2,
+          title: '"Sleeping"'
+        }],
         humModifiers: [{
           id: 0,
           title: 'Dry'
@@ -47919,10 +47962,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       },
       csrfToken: '',
       formData: {
+        co2: 0,
         humidity: 1,
         severity: 0,
         temperature: 1,
         transitionTo: {
+          co2: 0,
           humidity: 1,
           severity: -1,
           temperature: 1,
@@ -47959,6 +48004,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     clamp: function clamp(numVal, minVal, maxVal) {
       return Math.min(maxVal, Math.max(minVal, numVal));
     },
+    onClickCo2Modifier: function onClickCo2Modifier(id) {
+      var cId = this.clamp(id, 0, this.buttons.co2Modifiers.length - 1);
+      this.formData.co2 = cId;
+    },
     onClickHumidityModifier: function onClickHumidityModifier(id) {
       var cId = this.clamp(id, 0, this.buttons.humModifiers.length - 1);
       this.formData.humidity = cId;
@@ -47970,6 +48019,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     onClickTemperatureModifier: function onClickTemperatureModifier(id) {
       var cId = this.clamp(id, 0, this.buttons.tempModifiers.length - 1);
       this.formData.temperature = cId;
+    },
+    onClickTransitionModCo2: function onClickTransitionModCo2(id) {
+      var cId = this.clamp(id, 0, this.buttons.co2Modifiers.length - 1);
+      this.formData.transitionTo.co2 = cId;
     },
     onClickTransitionModHum: function onClickTransitionModHum(id) {
       var cId = this.clamp(id, 0, this.buttons.humModifiers.length - 1);
@@ -48012,6 +48065,11 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("input", {
+        attrs: { type: "hidden", name: "c" },
+        domProps: { value: _vm.formData.co2 }
+      }),
+      _vm._v(" "),
+      _c("input", {
         attrs: { type: "hidden", name: "h" },
         domProps: { value: _vm.formData.humidity }
       }),
@@ -48029,6 +48087,11 @@ var render = function() {
       _c("input", {
         attrs: { type: "hidden", name: "v" },
         domProps: { value: _vm.formData.voc }
+      }),
+      _vm._v(" "),
+      _c("input", {
+        attrs: { type: "hidden", name: "tc" },
+        domProps: { value: _vm.formData.transitionTo.co2 }
       }),
       _vm._v(" "),
       _c("input", {
@@ -48151,37 +48214,65 @@ var render = function() {
                     )
                   ])
                 })
-              ),
-              _vm._v(" "),
-              _c("h3", [_vm._v("VOC Modifier")]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "row my-3" },
-                _vm._l(_vm.buttons.vocModifiers, function(vocMod) {
-                  return _c("div", { key: vocMod.id, staticClass: "col-sm" }, [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-lg btn-block",
-                        class: {
-                          "btn-warning": _vm.formData.voc == vocMod.id,
-                          "btn-outline-warning": _vm.formData.voc != vocMod.id
-                        },
-                        attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            _vm.onClickVocModifier(vocMod.id)
-                          }
-                        }
-                      },
-                      [_vm._v(_vm._s(vocMod.title))]
-                    )
-                  ])
-                })
               )
             ])
-          : _vm._e()
+          : _vm._e(),
+        _vm._v(" "),
+        _vm._m(1),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "row my-3" },
+          _vm._l(_vm.buttons.co2Modifiers, function(co2Mod) {
+            return _c("div", { key: co2Mod.id, staticClass: "col-sm" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-lg btn-block",
+                  class: {
+                    "btn-warning": _vm.formData.co2 == co2Mod.id,
+                    "btn-outline-warning": _vm.formData.co2 != co2Mod.id
+                  },
+                  attrs: { type: "button" },
+                  on: {
+                    click: function($event) {
+                      _vm.onClickCo2Modifier(co2Mod.id)
+                    }
+                  }
+                },
+                [_vm._v(_vm._s(co2Mod.title))]
+              )
+            ])
+          })
+        ),
+        _vm._v(" "),
+        _c("h3", [_vm._v("VOC Modifier")]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "row my-3" },
+          _vm._l(_vm.buttons.vocModifiers, function(vocMod) {
+            return _c("div", { key: vocMod.id, staticClass: "col-sm" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-lg btn-block",
+                  class: {
+                    "btn-warning": _vm.formData.voc == vocMod.id,
+                    "btn-outline-warning": _vm.formData.voc != vocMod.id
+                  },
+                  attrs: { type: "button" },
+                  on: {
+                    click: function($event) {
+                      _vm.onClickVocModifier(vocMod.id)
+                    }
+                  }
+                },
+                [_vm._v(_vm._s(vocMod.title))]
+              )
+            ])
+          })
+        )
       ])
     ]),
     _vm._v(" "),
@@ -48307,6 +48398,42 @@ var render = function() {
                     ]
                   )
                 })
+              )
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.formData.transitionTo.severity >= 0
+          ? _c("div", [
+              _c(
+                "div",
+                { staticClass: "row my-3" },
+                _vm._l(_vm.buttons.co2Modifiers, function(co2Mod) {
+                  return _c(
+                    "div",
+                    { key: co2Mod.id, staticClass: "col-sm text-center" },
+                    [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-lg btn-block",
+                          class: {
+                            "btn-warning":
+                              _vm.formData.transitionTo.co2 == co2Mod.id,
+                            "btn-outline-warning":
+                              _vm.formData.transitionTo.co2 != co2Mod.id
+                          },
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              _vm.onClickTransitionModCo2(co2Mod.id)
+                            }
+                          }
+                        },
+                        [_vm._v(_vm._s(co2Mod.title))]
+                      )
+                    ]
+                  )
+                })
               ),
               _vm._v(" "),
               _c(
@@ -48359,6 +48486,16 @@ var staticRenderFns = [
           _c("sup", [_vm._v("TM")])
         ])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h3", [
+      _vm._v("CO"),
+      _c("sub", [_vm._v("2")]),
+      _vm._v(" Modifier")
     ])
   }
 ]

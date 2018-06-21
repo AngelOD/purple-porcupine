@@ -40,13 +40,19 @@ class ExamHelper
     /**
      *
      */
-    public static function setupGoodRoom($isFuture = false)
+    public static function setupGoodRoom($co2Status, $vocStatus, $isFuture = false)
     {
+        $co2Status = min(2, max(0, $co2Status));
+        $vocStatus = min(2, max(0, $vocStatus));
+
+        $co2s = [500, 1300, 2500];
+        $vocs = [10, 100, 200];
+
         return self::setupRoom([
             'temperature' => 2100,
             'humidity' => 37000,
-            'co2' => 500,
-            'tvoc' => 10,
+            'co2' => $co2s[$co2Status],
+            'tvoc' => $vocs[$vocStatus],
             'light' => 900,
             'uv' => 1,
             'sound_pressure' => 40,
@@ -56,20 +62,22 @@ class ExamHelper
     /**
      *
      */
-    public static function setupBadRoom($temperatureStatus, $humidityStatus, $vocStatus, $isFuture = false)
+    public static function setupBadRoom($temperatureStatus, $humidityStatus, $co2Status, $vocStatus, $isFuture = false)
     {
-        $temperatureStatus = min(2, max(0, $temperatureStatus));
+        $co2Status = min(2, max(0, $co2Status));
         $humidityStatus = min(2, max(0, $humidityStatus));
+        $temperatureStatus = min(2, max(0, $temperatureStatus));
         $vocStatus = min(2, max(0, $vocStatus));
 
-        $temps = [19, 21, 24];
+        $co2s = [500, 1300, 2500];
         $humids = [30, 37, 55];
+        $temps = [19, 21, 24];
         $vocs = [10, 100, 200];
 
         return self::setupRoom([
             'temperature' => $temps[$temperatureStatus] * 100,
             'humidity' => $humids[$humidityStatus] * 1000,
-            'co2' => 1300,
+            'co2' => $co2s[$co2Status],
             'tvoc' => $vocs[$vocStatus],
             'light' => 900,
             'uv' => 1,
@@ -80,20 +88,22 @@ class ExamHelper
     /**
      *
      */
-    public static function setupHorribleRoom($temperatureStatus, $humidityStatus, $vocStatus, $isFuture = false)
+    public static function setupHorribleRoom($temperatureStatus, $humidityStatus, $co2Status, $vocStatus, $isFuture = false)
     {
-        $temperatureStatus = min(2, max(0, $temperatureStatus));
+        $co2Status = min(2, max(0, $co2Status));
         $humidityStatus = min(2, max(0, $humidityStatus));
+        $temperatureStatus = min(2, max(0, $temperatureStatus));
         $vocStatus = min(2, max(0, $vocStatus));
 
-        $temps = [16, 21, 27];
+        $co2s = [500, 1300, 2500];
         $humids = [22, 37, 65];
+        $temps = [16, 21, 27];
         $vocs = [10, 100, 200];
 
         return self::setupRoom([
             'temperature' => $temps[$temperatureStatus] * 100,
             'humidity' => $humids[$humidityStatus] * 1000,
-            'co2' => 2500,
+            'co2' => $co2s[$co2status],
             'tvoc' => $vocs[$vocStatus],
             'light' => 900,
             'uv' => 1,
@@ -104,25 +114,25 @@ class ExamHelper
     /**
      *
      */
-    public static function makeRoomGood()
+    public static function makeRoomGood($co2Status, $vocStatus)
     {
-        return self::setupGoodRoom(true);
+        return self::setupGoodRoom($co2Status, $vocStatus, true);
     }
 
     /**
      *
      */
-    public static function makeRoomBad($temperatureStatus, $humidityStatus, $vocStatus)
+    public static function makeRoomBad($temperatureStatus, $humidityStatus, $co2Status, $vocStatus)
     {
-        return self::setupBadRoom($temperatureStatus, $humidityStatus, $vocStatus, true);
+        return self::setupBadRoom($temperatureStatus, $humidityStatus, $co2Status, $vocStatus, true);
     }
 
     /**
      *
      */
-    public static function makeRoomHorrible($temperatureStatus, $humidityStatus, $vocStatus)
+    public static function makeRoomHorrible($temperatureStatus, $humidityStatus, $co2Status, $vocStatus)
     {
-        return self::setupHorribleRoom($temperatureStatus, $humidityStatus, $vocStatus, true);
+        return self::setupHorribleRoom($temperatureStatus, $humidityStatus, $co2Status, $vocStatus, true);
     }
 
     /**

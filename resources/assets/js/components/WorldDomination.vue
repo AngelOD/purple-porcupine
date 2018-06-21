@@ -9,10 +9,12 @@
 
     <form action="/exam" method="post">
       <input type="hidden" name="_token" :value="csrfToken">
+      <input type="hidden" name="c" :value="formData.co2">
       <input type="hidden" name="h" :value="formData.humidity">
       <input type="hidden" name="s" :value="formData.severity">
       <input type="hidden" name="t" :value="formData.temperature">
       <input type="hidden" name="v" :value="formData.voc">
+      <input type="hidden" name="tc" :value="formData.transitionTo.co2">
       <input type="hidden" name="th" :value="formData.transitionTo.humidity">
       <input type="hidden" name="ts" :value="formData.transitionTo.severity">
       <input type="hidden" name="tt" :value="formData.transitionTo.temperature">
@@ -71,20 +73,35 @@
               >{{ humMod.title }}</button>
             </div>
           </div>
+        </div>
 
-          <h3>VOC Modifier</h3>
-          <div class="row my-3">
-            <div class="col-sm" v-for="vocMod in buttons.vocModifiers" :key="vocMod.id">
-              <button
-                type="button"
-                class="btn btn-lg btn-block"
-                :class="{
-                  'btn-warning': formData.voc == vocMod.id,
-                  'btn-outline-warning': formData.voc != vocMod.id
-                }"
-                @click="onClickVocModifier(vocMod.id)"
-              >{{ vocMod.title }}</button>
-            </div>
+        <h3>CO<sub>2</sub> Modifier</h3>
+        <div class="row my-3">
+          <div class="col-sm" v-for="co2Mod in buttons.co2Modifiers" :key="co2Mod.id">
+            <button
+              type="button"
+              class="btn btn-lg btn-block"
+              :class="{
+                'btn-warning': formData.co2 == co2Mod.id,
+                'btn-outline-warning': formData.co2 != co2Mod.id
+              }"
+              @click="onClickCo2Modifier(co2Mod.id)"
+            >{{ co2Mod.title }}</button>
+          </div>
+        </div>
+
+        <h3>VOC Modifier</h3>
+        <div class="row my-3">
+          <div class="col-sm" v-for="vocMod in buttons.vocModifiers" :key="vocMod.id">
+            <button
+              type="button"
+              class="btn btn-lg btn-block"
+              :class="{
+                'btn-warning': formData.voc == vocMod.id,
+                'btn-outline-warning': formData.voc != vocMod.id
+              }"
+              @click="onClickVocModifier(vocMod.id)"
+            >{{ vocMod.title }}</button>
           </div>
         </div>
       </div>
@@ -148,6 +165,22 @@
               >{{ humMod.title }}</button>
             </div>
           </div>
+        </div>
+
+        <div v-if="formData.transitionTo.severity >= 0">
+          <div class="row my-3">
+            <div class="col-sm text-center" v-for="co2Mod in buttons.co2Modifiers" :key="co2Mod.id">
+              <button
+                type="button"
+                class="btn btn-lg btn-block"
+                :class="{
+                  'btn-warning': formData.transitionTo.co2 == co2Mod.id,
+                  'btn-outline-warning': formData.transitionTo.co2 != co2Mod.id
+                }"
+                @click="onClickTransitionModCo2(co2Mod.id)"
+              >{{ co2Mod.title }}</button>
+            </div>
+          </div>
 
           <div class="row my-3">
             <div class="col-sm text-center" v-for="vocMod in buttons.vocModifiers" :key="vocMod.id">
@@ -177,6 +210,20 @@ export default {
   data() {
     return {
       buttons: {
+        co2Modifiers: [
+          {
+            id: 0,
+            title: 'Just Right'
+          },
+          {
+            id: 1,
+            title: 'Dizzy'
+          },
+          {
+            id: 2,
+            title: '"Sleeping"'
+          }
+        ],
         humModifiers: [
           {
             id: 0,
@@ -236,10 +283,12 @@ export default {
       },
       csrfToken: '',
       formData: {
+        co2: 0,
         humidity: 1,
         severity: 0,
         temperature: 1,
         transitionTo: {
+          co2: 0,
           humidity: 1,
           severity: -1,
           temperature: 1,
@@ -276,6 +325,11 @@ export default {
       return Math.min(maxVal, Math.max(minVal, numVal));
     },
 
+    onClickCo2Modifier(id) {
+      var cId = this.clamp(id, 0, this.buttons.co2Modifiers.length - 1);
+      this.formData.co2 = cId;
+    },
+
     onClickHumidityModifier(id) {
       var cId = this.clamp(id, 0, this.buttons.humModifiers.length - 1);
       this.formData.humidity = cId;
@@ -289,6 +343,11 @@ export default {
     onClickTemperatureModifier(id) {
       var cId = this.clamp(id, 0, this.buttons.tempModifiers.length - 1);
       this.formData.temperature = cId;
+    },
+
+    onClickTransitionModCo2(id) {
+      var cId = this.clamp(id, 0, this.buttons.co2Modifiers.length - 1);
+      this.formData.transitionTo.co2 = cId;
     },
 
     onClickTransitionModHum(id) {

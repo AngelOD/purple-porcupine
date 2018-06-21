@@ -12,9 +12,11 @@
       <input type="hidden" name="h" :value="formData.humidity">
       <input type="hidden" name="s" :value="formData.severity">
       <input type="hidden" name="t" :value="formData.temperature">
+      <input type="hidden" name="v" :value="formData.voc">
       <input type="hidden" name="th" :value="formData.transitionTo.humidity">
       <input type="hidden" name="ts" :value="formData.transitionTo.severity">
       <input type="hidden" name="tt" :value="formData.transitionTo.temperature">
+      <input type="hidden" name="tv" :value="formData.transitionTo.voc">
       <button type="submit" class="btn btn-danger btn-lg btn-block font-weight-bold mb-5">
         E X E C U T E
       </button>
@@ -67,6 +69,21 @@
                 }"
                 @click="onClickHumidityModifier(humMod.id)"
               >{{ humMod.title }}</button>
+            </div>
+          </div>
+
+          <h3>VOC Modifier</h3>
+          <div class="row my-3">
+            <div class="col-sm" v-for="vocMod in buttons.vocModifiers" :key="vocMod.id">
+              <button
+                type="button"
+                class="btn btn-lg btn-block"
+                :class="{
+                  'btn-warning': formData.voc == vocMod.id,
+                  'btn-outline-warning': formData.voc != vocMod.id
+                }"
+                @click="onClickVocModifier(vocMod.id)"
+              >{{ vocMod.title }}</button>
             </div>
           </div>
         </div>
@@ -131,6 +148,20 @@
               >{{ humMod.title }}</button>
             </div>
           </div>
+
+          <div class="row my-3">
+            <div class="col-sm text-center" v-for="vocMod in buttons.vocModifiers" :key="vocMod.id">
+              <button
+                type="button"
+                class="btn btn-lg btn-block"
+                :class="{
+                  'btn-warning': formData.transitionTo.voc == vocMod.id,
+                  'btn-outline-warning': formData.transitionTo.voc != vocMod.id
+                }"
+                @click="onClickTransitionModVoc(vocMod.id)"
+              >{{ vocMod.title }}</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -187,6 +218,20 @@ export default {
             id: 2,
             title: 'Warm'
           }
+        ],
+        vocModifiers: [
+          {
+            id: 0,
+            title: 'Just Right'
+          },
+          {
+            id: 1,
+            title: 'Lesser Green Fog'
+          },
+          {
+            id: 2,
+            title: 'Greater Green Fog'
+          }
         ]
       },
       csrfToken: '',
@@ -197,8 +242,10 @@ export default {
         transitionTo: {
           humidity: 1,
           severity: -1,
-          temperature: 1
-        }
+          temperature: 1,
+          voc: 0
+        },
+        voc: 0
       }
     };
   },
@@ -230,33 +277,43 @@ export default {
     },
 
     onClickHumidityModifier(id) {
-      var cId = this.clamp(id, 0, this.buttons.humModifiers.length);
+      var cId = this.clamp(id, 0, this.buttons.humModifiers.length - 1);
       this.formData.humidity = cId;
     },
 
     onClickRoomType(id) {
-      var cId = this.clamp(id, 0, this.buttons.roomTypes.length);
+      var cId = this.clamp(id, 0, this.buttons.roomTypes.length - 1);
       this.formData.severity = cId;
     },
 
     onClickTemperatureModifier(id) {
-      var cId = this.clamp(id, 0, this.buttons.tempModifiers.length);
+      var cId = this.clamp(id, 0, this.buttons.tempModifiers.length - 1);
       this.formData.temperature = cId;
     },
 
     onClickTransitionModHum(id) {
-      var cId = this.clamp(id, 0, this.buttons.humModifiers.length);
+      var cId = this.clamp(id, 0, this.buttons.humModifiers.length - 1);
       this.formData.transitionTo.humidity = cId;
     },
 
     onClickTransitionModTemp(id) {
-      var cId = this.clamp(id, 0, this.buttons.tempModifiers.length);
+      var cId = this.clamp(id, 0, this.buttons.tempModifiers.length - 1);
       this.formData.transitionTo.temperature = cId;
     },
 
     onClickTransitionTo(id) {
-      var cId = this.clamp(id, -1, this.buttons.roomTypes.length);
+      var cId = this.clamp(id, -1, this.buttons.roomTypes.length - 1);
       this.formData.transitionTo.severity = cId;
+    },
+
+    onClickTransitionModVoc(id) {
+      var cId = this.clamp(id, 0, this.buttons.vocModifiers.length - 1);
+      this.formData.transitionTo.voc = cId;
+    },
+
+    onClickVocModifier(id) {
+      var cId = this.clamp(id, 0, this.buttons.vocModifiers.length - 1);
+      this.formData.voc = cId;
     }
   }
 }

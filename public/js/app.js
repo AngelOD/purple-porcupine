@@ -47234,7 +47234,7 @@ exports = module.exports = __webpack_require__(42)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -47836,6 +47836,37 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'vue-world-domination',
@@ -47874,6 +47905,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }, {
           id: 2,
           title: 'Warm'
+        }],
+        vocModifiers: [{
+          id: 0,
+          title: 'Just Right'
+        }, {
+          id: 1,
+          title: 'Lesser Green Fog'
+        }, {
+          id: 2,
+          title: 'Greater Green Fog'
         }]
       },
       csrfToken: '',
@@ -47884,8 +47925,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         transitionTo: {
           humidity: 1,
           severity: -1,
-          temperature: 1
-        }
+          temperature: 1,
+          voc: 0
+        },
+        voc: 0
       }
     };
   },
@@ -47917,28 +47960,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       return Math.min(maxVal, Math.max(minVal, numVal));
     },
     onClickHumidityModifier: function onClickHumidityModifier(id) {
-      var cId = this.clamp(id, 0, this.buttons.humModifiers.length);
+      var cId = this.clamp(id, 0, this.buttons.humModifiers.length - 1);
       this.formData.humidity = cId;
     },
     onClickRoomType: function onClickRoomType(id) {
-      var cId = this.clamp(id, 0, this.buttons.roomTypes.length);
+      var cId = this.clamp(id, 0, this.buttons.roomTypes.length - 1);
       this.formData.severity = cId;
     },
     onClickTemperatureModifier: function onClickTemperatureModifier(id) {
-      var cId = this.clamp(id, 0, this.buttons.tempModifiers.length);
+      var cId = this.clamp(id, 0, this.buttons.tempModifiers.length - 1);
       this.formData.temperature = cId;
     },
     onClickTransitionModHum: function onClickTransitionModHum(id) {
-      var cId = this.clamp(id, 0, this.buttons.humModifiers.length);
+      var cId = this.clamp(id, 0, this.buttons.humModifiers.length - 1);
       this.formData.transitionTo.humidity = cId;
     },
     onClickTransitionModTemp: function onClickTransitionModTemp(id) {
-      var cId = this.clamp(id, 0, this.buttons.tempModifiers.length);
+      var cId = this.clamp(id, 0, this.buttons.tempModifiers.length - 1);
       this.formData.transitionTo.temperature = cId;
     },
     onClickTransitionTo: function onClickTransitionTo(id) {
-      var cId = this.clamp(id, -1, this.buttons.roomTypes.length);
+      var cId = this.clamp(id, -1, this.buttons.roomTypes.length - 1);
       this.formData.transitionTo.severity = cId;
+    },
+    onClickTransitionModVoc: function onClickTransitionModVoc(id) {
+      var cId = this.clamp(id, 0, this.buttons.vocModifiers.length - 1);
+      this.formData.transitionTo.voc = cId;
+    },
+    onClickVocModifier: function onClickVocModifier(id) {
+      var cId = this.clamp(id, 0, this.buttons.vocModifiers.length - 1);
+      this.formData.voc = cId;
     }
   }
 });
@@ -47976,6 +48027,11 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("input", {
+        attrs: { type: "hidden", name: "v" },
+        domProps: { value: _vm.formData.voc }
+      }),
+      _vm._v(" "),
+      _c("input", {
         attrs: { type: "hidden", name: "th" },
         domProps: { value: _vm.formData.transitionTo.humidity }
       }),
@@ -47988,6 +48044,11 @@ var render = function() {
       _c("input", {
         attrs: { type: "hidden", name: "tt" },
         domProps: { value: _vm.formData.transitionTo.temperature }
+      }),
+      _vm._v(" "),
+      _c("input", {
+        attrs: { type: "hidden", name: "tv" },
+        domProps: { value: _vm.formData.transitionTo.voc }
       }),
       _vm._v(" "),
       _c(
@@ -48087,6 +48148,34 @@ var render = function() {
                         }
                       },
                       [_vm._v(_vm._s(humMod.title))]
+                    )
+                  ])
+                })
+              ),
+              _vm._v(" "),
+              _c("h3", [_vm._v("VOC Modifier")]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "row my-3" },
+                _vm._l(_vm.buttons.vocModifiers, function(vocMod) {
+                  return _c("div", { key: vocMod.id, staticClass: "col-sm" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-lg btn-block",
+                        class: {
+                          "btn-warning": _vm.formData.voc == vocMod.id,
+                          "btn-outline-warning": _vm.formData.voc != vocMod.id
+                        },
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.onClickVocModifier(vocMod.id)
+                          }
+                        }
+                      },
+                      [_vm._v(_vm._s(vocMod.title))]
                     )
                   ])
                 })
@@ -48214,6 +48303,38 @@ var render = function() {
                           }
                         },
                         [_vm._v(_vm._s(humMod.title))]
+                      )
+                    ]
+                  )
+                })
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "row my-3" },
+                _vm._l(_vm.buttons.vocModifiers, function(vocMod) {
+                  return _c(
+                    "div",
+                    { key: vocMod.id, staticClass: "col-sm text-center" },
+                    [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-lg btn-block",
+                          class: {
+                            "btn-warning":
+                              _vm.formData.transitionTo.voc == vocMod.id,
+                            "btn-outline-warning":
+                              _vm.formData.transitionTo.voc != vocMod.id
+                          },
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              _vm.onClickTransitionModVoc(vocMod.id)
+                            }
+                          }
+                        },
+                        [_vm._v(_vm._s(vocMod.title))]
                       )
                     ]
                   )

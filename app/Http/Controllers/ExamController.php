@@ -24,9 +24,11 @@ class ExamController extends Controller
             's' => $request->input('s', 0),
             'h' => $request->input('h', 1),
             't' => $request->input('t', 1),
+            'v' => $request->input('v', 0),
             'ts' => $request->input('ts', -1),
             'th' => $request->input('th', 1),
             'tt' => $request->input('tt', 1),
+            'tv' => $request->input('tv', 0),
         ];
 
         switch ($data['s']) {
@@ -35,11 +37,11 @@ class ExamController extends Controller
                 break;
 
             case 1:
-                ExamHelper::setupBadRoom($data['t'], $data['h']);
+                ExamHelper::setupBadRoom($data['t'], $data['h'], $data['v']);
                 break;
 
             case 2:
-                ExamHelper::setupHorribleRoom($data['t'], $data['h']);
+                ExamHelper::setupHorribleRoom($data['t'], $data['h'], $data['v']);
                 break;
         }
 
@@ -50,11 +52,11 @@ class ExamController extends Controller
                     break;
 
                 case 1:
-                    ExamHelper::makeRoomBad($data['tt'], $data['th']);
+                    ExamHelper::makeRoomBad($data['tt'], $data['th'], $data['tv']);
                     break;
 
                 case 2:
-                    ExamHelper::makeRoomHorrible($data['tt'], $data['th']);
+                    ExamHelper::makeRoomHorrible($data['tt'], $data['th'], $data['tv']);
                     break;
             }
         }

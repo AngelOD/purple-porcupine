@@ -10,11 +10,13 @@
     <form action="/exam" method="post">
       <input type="hidden" name="_token" :value="csrfToken">
       <input type="hidden" name="c" :value="formData.co2">
+      <input type="hidden" name="d" :value="formData.duration">
       <input type="hidden" name="h" :value="formData.humidity">
       <input type="hidden" name="s" :value="formData.severity">
       <input type="hidden" name="t" :value="formData.temperature">
       <input type="hidden" name="v" :value="formData.voc">
       <input type="hidden" name="tc" :value="formData.transitionTo.co2">
+      <input type="hidden" name="td" :value="formData.transitionTo.duration">
       <input type="hidden" name="th" :value="formData.transitionTo.humidity">
       <input type="hidden" name="ts" :value="formData.transitionTo.severity">
       <input type="hidden" name="tt" :value="formData.transitionTo.temperature">
@@ -26,7 +28,7 @@
 
     <div class="card">
       <div class="card-body text-center">
-        <h2 class="card-title">Controls</h2>
+        <h2 class="card-title">Past and current</h2>
 
         <h3>Room Type</h3>
         <div class="row my-3">
@@ -40,6 +42,21 @@
               }"
               @click="onClickRoomType(room.id)"
             >{{ room.title }}</button>
+          </div>
+        </div>
+
+        <h3>Duration (minutes)</h3>
+        <div class="row my-3">
+          <div class="col-sm" v-for="duration in buttons.durations" :key="duration">
+            <button
+              type="button"
+              class="btn btn-lg btn-block"
+              :class="{
+                'btn-info': formData.duration == duration,
+                'btn-outline-info': formData.duration != duration
+              }"
+              @click="onClickDuration(duration)"
+            >{{ duration }}</button>
           </div>
         </div>
 
@@ -109,7 +126,7 @@
 
     <div class="card my-4">
       <div class="card-body text-center">
-        <h2 class="card-title">Transition</h2>
+        <h2 class="card-title">Future</h2>
 
         <div class="row my-3">
           <button
@@ -134,6 +151,22 @@
               }"
               @click="onClickTransitionTo(roomType.id)"
             >{{ roomType.title }}</button>
+          </div>
+        </div>
+
+        <div v-if="formData.transitionTo.severity >= 0">
+          <div class="row my-3">
+            <div class="col-sm text-center" v-for="duration in buttons.durations" :key="duration">
+              <button
+                type="button"
+                class="btn btn-lg btn-block"
+                :class="{
+                  'btn-info': formData.transitionTo.duration == duration,
+                  'btn-outline-info': formData.transitionTo.duration != duration
+                }"
+                @click="onClickTransitionToDuration(duration)"
+              >{{ duration }}</button>
+            </div>
           </div>
         </div>
 
@@ -211,84 +244,42 @@ export default {
     return {
       buttons: {
         co2Modifiers: [
-          {
-            id: 0,
-            title: 'Just Right'
-          },
-          {
-            id: 1,
-            title: 'Dizzy'
-          },
-          {
-            id: 2,
-            title: '"Sleeping"'
-          }
+          { id: 0, title: 'Just Right' },
+          { id: 1, title: 'Dizzy' },
+          { id: 2, title: '"Sleeping"' }
         ],
+        durations: [30, 60, 90, 120, 180],
         humModifiers: [
-          {
-            id: 0,
-            title: 'Dry'
-          },
-          {
-            id: 1,
-            title: 'Just Right'
-          },
-          {
-            id: 2,
-            title: 'Moist'
-          }
+          { id: 0, title: 'Dry' },
+          { id: 1, title: 'Just Right' },
+          { id: 2, title: 'Moist' }
         ],
         roomTypes: [
-          {
-            id: 0,
-            title: 'Good'
-          },
-          {
-            id: 1,
-            title: 'Bad'
-          },
-          {
-            id: 2,
-            title: 'Horrible'
-          }
+          { id: 0, title: 'Good' },
+          { id: 1, title: 'Bad' },
+          { id: 2, title: 'Horrible' }
         ],
         tempModifiers: [
-          {
-            id: 0,
-            title: 'Cold'
-          },
-          {
-            id: 1,
-            title: 'Just Right'
-          },
-          {
-            id: 2,
-            title: 'Warm'
-          }
+          { id: 0, title: 'Cold' },
+          { id: 1, title: 'Just Right' },
+          { id: 2, title: 'Warm' }
         ],
         vocModifiers: [
-          {
-            id: 0,
-            title: 'Just Right'
-          },
-          {
-            id: 1,
-            title: 'Lesser Green Fog'
-          },
-          {
-            id: 2,
-            title: 'Greater Green Fog'
-          }
+          { id: 0, title: 'Just Right' },
+          { id: 1, title: 'Lesser Green Fog' },
+          { id: 2, title: 'Greater Green Fog' }
         ]
       },
       csrfToken: '',
       formData: {
         co2: 0,
+        duration: 30,
         humidity: 1,
         severity: 0,
         temperature: 1,
         transitionTo: {
           co2: 0,
+          duration: 60,
           humidity: 1,
           severity: -1,
           temperature: 1,
@@ -330,6 +321,11 @@ export default {
       this.formData.co2 = cId;
     },
 
+    onClickDuration(duration) {
+      var cDuration = this.clamp(duration, 30, 600);
+      this.formData.duration = cDuration;
+    },
+
     onClickHumidityModifier(id) {
       var cId = this.clamp(id, 0, this.buttons.humModifiers.length - 1);
       this.formData.humidity = cId;
@@ -363,6 +359,11 @@ export default {
     onClickTransitionTo(id) {
       var cId = this.clamp(id, -1, this.buttons.roomTypes.length - 1);
       this.formData.transitionTo.severity = cId;
+    },
+
+    onClickTransitionToDuration(duration) {
+      var cDuration = this.clamp(duration, 30, 600);
+      this.formData.transitionTo.duration = cDuration;
     },
 
     onClickTransitionModVoc(id) {

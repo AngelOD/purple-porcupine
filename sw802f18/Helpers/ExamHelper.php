@@ -40,7 +40,7 @@ class ExamHelper
     /**
      *
      */
-    public static function setupGoodRoom($co2Status, $vocStatus, $isFuture = false)
+    public static function setupGoodRoom($co2Status, $vocStatus, $isFuture = false, $minutes = 60)
     {
         $co2Status = min(2, max(0, $co2Status));
         $vocStatus = min(2, max(0, $vocStatus));
@@ -56,13 +56,13 @@ class ExamHelper
             'light' => 900,
             'uv' => 1,
             'sound_pressure' => 40,
-        ], $isFuture);
+        ], $isFuture, $minutes);
     }
 
     /**
      *
      */
-    public static function setupBadRoom($temperatureStatus, $humidityStatus, $co2Status, $vocStatus, $isFuture = false)
+    public static function setupBadRoom($temperatureStatus, $humidityStatus, $co2Status, $vocStatus, $isFuture = false, $minutes = 60)
     {
         $co2Status = min(2, max(0, $co2Status));
         $humidityStatus = min(2, max(0, $humidityStatus));
@@ -82,13 +82,13 @@ class ExamHelper
             'light' => 900,
             'uv' => 1,
             'sound_pressure' => 40,
-        ], $isFuture);
+        ], $isFuture, $minutes);
     }
 
     /**
      *
      */
-    public static function setupHorribleRoom($temperatureStatus, $humidityStatus, $co2Status, $vocStatus, $isFuture = false)
+    public static function setupHorribleRoom($temperatureStatus, $humidityStatus, $co2Status, $vocStatus, $isFuture = false, $minutes = 60)
     {
         $co2Status = min(2, max(0, $co2Status));
         $humidityStatus = min(2, max(0, $humidityStatus));
@@ -108,41 +108,41 @@ class ExamHelper
             'light' => 900,
             'uv' => 1,
             'sound_pressure' => 40,
-        ], $isFuture);
+        ], $isFuture, $minutes);
     }
 
     /**
      *
      */
-    public static function makeRoomGood($co2Status, $vocStatus)
+    public static function makeRoomGood($co2Status, $vocStatus, $minutes = 60)
     {
-        return self::setupGoodRoom($co2Status, $vocStatus, true);
+        return self::setupGoodRoom($co2Status, $vocStatus, true, $minutes);
     }
 
     /**
      *
      */
-    public static function makeRoomBad($temperatureStatus, $humidityStatus, $co2Status, $vocStatus)
+    public static function makeRoomBad($temperatureStatus, $humidityStatus, $co2Status, $vocStatus, $minutes = 60)
     {
-        return self::setupBadRoom($temperatureStatus, $humidityStatus, $co2Status, $vocStatus, true);
+        return self::setupBadRoom($temperatureStatus, $humidityStatus, $co2Status, $vocStatus, true, $minutes);
     }
 
     /**
      *
      */
-    public static function makeRoomHorrible($temperatureStatus, $humidityStatus, $co2Status, $vocStatus)
+    public static function makeRoomHorrible($temperatureStatus, $humidityStatus, $co2Status, $vocStatus, $minutes = 60)
     {
-        return self::setupHorribleRoom($temperatureStatus, $humidityStatus, $co2Status, $vocStatus, true);
+        return self::setupHorribleRoom($temperatureStatus, $humidityStatus, $co2Status, $vocStatus, true, $minutes);
     }
 
     /**
      *
      */
-    protected static function setupRoom($data, $isFuture = false)
+    protected static function setupRoom($data, $isFuture = false, $minutes = 60)
     {
         $room = ($isFuture ? self::getRoom() : self::clearRoomSensorData());
         $now = Carbon::now();
-        $maxCount = ($isFuture ? 30 : 60);
+        $maxCount = $minutes;
         $origData = $data;
         $dbData = self::getLatestSensorData();
         $loopCount = 1;
@@ -249,10 +249,10 @@ class ExamHelper
         foreach ($from as $key => $value) {
             if (!array_key_exists($key, $to)) { continue; }
 
-            if ($to[$key] !== $value) {
+            if ($index < $count) {
                 $newData[$key] = (int)($value + floor((($to[$key] - $value) / $count) * $index));
             } else {
-                $newData[$key] = $value;
+                $newData[$key] = $to[$key];
             }
         }
 

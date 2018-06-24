@@ -4,12 +4,13 @@ namespace SW802F18\Helpers;
 use DB;
 use InfluxDB;
 use App\Room;
+use App\Score;
 use App\SensorCluster;
 use Carbon\Carbon;
 
 class ExamHelper
 {
-    private const ROOM_NAME = 'ExamTestRoom';
+    private const ROOM_NAME = '8.a';
     private const CLUSTER_MAC = 'FFFFFFFF';
 
     /**
@@ -103,7 +104,7 @@ class ExamHelper
         return self::setupRoom([
             'temperature' => $temps[$temperatureStatus] * 100,
             'humidity' => $humids[$humidityStatus] * 1000,
-            'co2' => $co2s[$co2status],
+            'co2' => $co2s[$co2Status],
             'tvoc' => $vocs[$vocStatus],
             'light' => 900,
             'uv' => 1,
@@ -213,6 +214,90 @@ class ExamHelper
 
         $q = 'DELETE FROM "radio_datas" WHERE "node_mac_address" = \'' . $sc->node_mac_address . '\'';
         InfluxDB::query($q);
+
+        return $room;
+    }
+
+    /**
+     *
+     */
+    public static function setupRoomScores()
+    {
+        $room = self::getRoom();
+        $scores = [
+            'totalScore' => [
+                10.1875, 7.106534091, 9.25, 10.1875,
+                11.125, 8.3125, 9.25, 8.3125,
+            ],
+            'iaqScore' => [
+                100, 28.40909091, 100, 100,
+                100, 100, 100, 100,
+            ],
+            'soundScore' => [
+                100, 100, 100, 100,
+                100, 100, 100, 100,
+            ],
+            'tempHumScore' => [
+                75, 47.727273, 50, 75,
+                100, 25, 50, 25,
+            ],
+            'visualScore' => [
+                50, 50, 50, 50,
+                50, 50, 50, 50,
+            ],
+        ];
+
+        // Clear existing scores
+        Score::destroy($room->scores()->select('id')->get()->pluck('id')->toArray());
+
+        // Generate scores for last week
+        $dt = Carbon::now()->setTimezone('Europe/Copenhagen')->startOfDay()->subDays(7);
+
+        for ($i = 0; $i < 7; $i++) {
+            $dt->addHours(8);
+
+            for ($j = 0; $j < 8; $j++) {
+                $dt->addHour();
+                $s = Score::make();
+
+                $s->end_time = TimeHelper::carbonToNanoTime($dt);
+                $s->interval = 300;
+                $s->total_score = $scores['totalScore'][$j];
+                $s->IAQ_score = $scores['iaqScore'][$j];
+                $s->sound_score = $scores['soundScore'][$j];
+                $s->temp_hum_score = $scores['tempHumScore'][$j];
+                $s->visual_score = $scores['visualScore'][$j];
+
+                $room->scores()->save($s);
+            }
+
+            $dt->addDay()->startOfDay();
+        }
+
+        // Generate score for today
+        $dt = Carbon::now()->setTimezone('Europe/Copenhagen')->startOfDay()->addHours(7);
+
+        $s = Score::make();
+        $s->end_time = TimeHelper::carbonToNanoTime($dt);
+        $s->interval = 300;
+        $s->total_score = 6.575520833;
+        $s->IAQ_score = 39.58333;
+        $s->sound_score = 100;
+        $s->temp_hum_score = 25;
+        $s->visual_score = 50;
+        $room->scores()->save($s);
+
+        $dt->addHour();
+
+        $s = Score::make();
+        $s->end_time = TimeHelper::carbonToNanoTime($dt);
+        $s->interval = 300;
+        $s->total_score = 10.625;
+        $s->IAQ_score = 100;
+        $s->sound_score = 100;
+        $s->temp_hum_score = 50;
+        $s->visual_score = 100;
+        $room->scores()->save($s);
 
         return $room;
     }

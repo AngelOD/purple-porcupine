@@ -24,8 +24,8 @@ class Score extends Model
 
     public function scopeToday($query)
     {
-        $start = TimeHelper::carbonToNanoTime(Carbon::now()->startOfDay());
-        $end = TimeHelper::carbonToNanoTime(Carbon::now());
+        $start = TimeHelper::carbonToNanoTime(Carbon::now()->setTimezone('Europe/Copenhagen')->startOfDay());
+        $end = TimeHelper::carbonToNanoTime(Carbon::now()->setTimezone('Europe/Copenhagen'));
 
         return $query->whereBetween('end_time', [$start, $end]);
     }

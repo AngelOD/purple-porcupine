@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Score;
 use Illuminate\Http\Request;
 use SW802F18\Helpers\ExamHelper;
 
@@ -64,6 +65,9 @@ class ExamController extends Controller
                     break;
             }
         }
+
+        // Setup scores
+        ExamHelper::setupRoomScores();
 
         return redirect('/exam')->with('status', 'Method called.');
     }

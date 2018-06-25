@@ -149,7 +149,7 @@ class ExamHelper
 
         if ($isFuture) {
             $data = self::calculateNewData($dbData, $origData, $loopCount);
-            $now->subMinutes(20);
+            $now->subMinutes(25);
             $minutes += 20;
         } else {
             $now->addMinute();
@@ -226,7 +226,7 @@ class ExamHelper
     {
         $room = self::getRoom();
         $sc = $room->sensorClusters[0];
-        $dt = Carbon::now()->subMinutes(20);
+        $dt = Carbon::now()->subMinutes(25);
 
         $q = 'DELETE FROM "radio_datas" '
             .'WHERE "node_mac_address" = \'' . $sc->node_mac_address . '\''

@@ -24,213 +24,225 @@
       <button type="submit" class="btn btn-danger btn-lg btn-block font-weight-bold mb-5">
         E X E C U T E
       </button>
-    </form>
 
-    <div class="card">
-      <div class="card-body text-center">
-        <h2 class="card-title">Past and current</h2>
+      <div class="card">
+        <div class="card-body text-center">
+          <h2 class="card-title">Past and current</h2>
 
-        <h3>Room Type</h3>
-        <div class="row my-3">
-          <div class="col-sm" v-for="room in buttons.roomTypes" :key="room.id">
-            <button
-              type="button"
-              class="btn btn-lg btn-block"
-              :class="{
-                'btn-primary': formData.severity == room.id,
-                'btn-outline-primary': formData.severity != room.id
-              }"
-              @click="onClickRoomType(room.id)"
-            >{{ room.title }}</button>
-          </div>
-        </div>
-
-        <h3>Duration (minutes)</h3>
-        <div class="row my-3">
-          <div class="col-sm" v-for="duration in buttons.durations" :key="duration">
-            <button
-              type="button"
-              class="btn btn-lg btn-block"
-              :class="{
-                'btn-info': formData.duration == duration,
-                'btn-outline-info': formData.duration != duration
-              }"
-              @click="onClickDuration(duration)"
-            >{{ duration }}</button>
-          </div>
-        </div>
-
-        <div v-if="formData.severity > 0">
-          <h3>Temperature Modifier</h3>
+          <h3>Room Type</h3>
           <div class="row my-3">
-            <div class="col-sm" v-for="tempMod in buttons.tempModifiers" :key="tempMod.id">
+            <div class="col-sm" v-for="room in buttons.roomTypes" :key="room.id">
               <button
                 type="button"
                 class="btn btn-lg btn-block"
                 :class="{
-                  'btn-warning': formData.temperature == tempMod.id,
-                  'btn-outline-warning': formData.temperature != tempMod.id
+                  'btn-primary': formData.severity == room.id,
+                  'btn-outline-primary': formData.severity != room.id
                 }"
-                @click="onClickTemperatureModifier(tempMod.id)"
-              >{{ tempMod.title }}</button>
+                @click="onClickRoomType(room.id)"
+              >{{ room.title }}</button>
             </div>
           </div>
 
-          <h3>Humidity Modifier</h3>
+          <h3>Duration (minutes)</h3>
           <div class="row my-3">
-            <div class="col-sm" v-for="humMod in buttons.humModifiers" :key="humMod.id">
+            <div class="col-sm" v-for="duration in buttons.durations" :key="duration">
               <button
                 type="button"
                 class="btn btn-lg btn-block"
                 :class="{
-                  'btn-warning': formData.humidity == humMod.id,
-                  'btn-outline-warning': formData.humidity != humMod.id
+                  'btn-info': formData.duration == duration,
+                  'btn-outline-info': formData.duration != duration
                 }"
-                @click="onClickHumidityModifier(humMod.id)"
-              >{{ humMod.title }}</button>
-            </div>
-          </div>
-        </div>
-
-        <h3>CO<sub>2</sub> Modifier</h3>
-        <div class="row my-3">
-          <div class="col-sm" v-for="co2Mod in buttons.co2Modifiers" :key="co2Mod.id">
-            <button
-              type="button"
-              class="btn btn-lg btn-block"
-              :class="{
-                'btn-warning': formData.co2 == co2Mod.id,
-                'btn-outline-warning': formData.co2 != co2Mod.id
-              }"
-              @click="onClickCo2Modifier(co2Mod.id)"
-            >{{ co2Mod.title }}</button>
-          </div>
-        </div>
-
-        <h3>VOC Modifier</h3>
-        <div class="row my-3">
-          <div class="col-sm" v-for="vocMod in buttons.vocModifiers" :key="vocMod.id">
-            <button
-              type="button"
-              class="btn btn-lg btn-block"
-              :class="{
-                'btn-warning': formData.voc == vocMod.id,
-                'btn-outline-warning': formData.voc != vocMod.id
-              }"
-              @click="onClickVocModifier(vocMod.id)"
-            >{{ vocMod.title }}</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card my-4">
-      <div class="card-body text-center">
-        <h2 class="card-title">Future</h2>
-
-        <div class="row my-3">
-          <button
-            type="button"
-            class="btn btn-lg btn-block"
-            :class="{
-              'btn-primary': formData.transitionTo.severity == -1,
-              'btn-outline-primary': formData.transitionTo.severity != -1
-            }"
-            @click="onClickTransitionTo(-1)"
-          >None</button>
-        </div>
-
-        <div class="row my-3">
-          <div class="col-sm text-center" v-for="roomType in buttons.roomTypes" :key="roomType.id">
-            <button
-              type="button"
-              class="btn btn-lg btn-block"
-              :class="{
-                'btn-primary': formData.transitionTo.severity == roomType.id,
-                'btn-outline-primary': formData.transitionTo.severity != roomType.id
-              }"
-              @click="onClickTransitionTo(roomType.id)"
-            >{{ roomType.title }}</button>
-          </div>
-        </div>
-
-        <div v-if="formData.transitionTo.severity >= 0">
-          <div class="row my-3">
-            <div class="col-sm text-center" v-for="duration in buttons.durations" :key="duration">
-              <button
-                type="button"
-                class="btn btn-lg btn-block"
-                :class="{
-                  'btn-info': formData.transitionTo.duration == duration,
-                  'btn-outline-info': formData.transitionTo.duration != duration
-                }"
-                @click="onClickTransitionToDuration(duration)"
+                @click="onClickDuration(duration)"
               >{{ duration }}</button>
             </div>
           </div>
-        </div>
 
-        <div v-if="formData.transitionTo.severity > 0">
-          <div class="row my-3">
-            <div class="col-sm text-center" v-for="tempMod in buttons.tempModifiers" :key="tempMod.id">
-              <button
-                type="button"
-                class="btn btn-lg btn-block"
-                :class="{
-                  'btn-warning': formData.transitionTo.temperature == tempMod.id,
-                  'btn-outline-warning': formData.transitionTo.temperature != tempMod.id
-                }"
-                @click="onClickTransitionModTemp(tempMod.id)"
-              >{{ tempMod.title }}</button>
+          <div v-if="formData.severity > 0">
+            <h3>Temperature Modifier</h3>
+            <div class="row my-3">
+              <div class="col-sm" v-for="tempMod in buttons.tempModifiers" :key="tempMod.id">
+                <button
+                  type="button"
+                  class="btn btn-lg btn-block"
+                  :class="{
+                    'btn-warning': formData.temperature == tempMod.id,
+                    'btn-outline-warning': formData.temperature != tempMod.id
+                  }"
+                  @click="onClickTemperatureModifier(tempMod.id)"
+                >{{ tempMod.title }}</button>
+              </div>
+            </div>
+
+            <h3>Humidity Modifier</h3>
+            <div class="row my-3">
+              <div class="col-sm" v-for="humMod in buttons.humModifiers" :key="humMod.id">
+                <button
+                  type="button"
+                  class="btn btn-lg btn-block"
+                  :class="{
+                    'btn-warning': formData.humidity == humMod.id,
+                    'btn-outline-warning': formData.humidity != humMod.id
+                  }"
+                  @click="onClickHumidityModifier(humMod.id)"
+                >{{ humMod.title }}</button>
+              </div>
             </div>
           </div>
 
+          <h3>CO<sub>2</sub> Modifier</h3>
           <div class="row my-3">
-            <div class="col-sm text-center" v-for="humMod in buttons.humModifiers" :key="humMod.id">
+            <div class="col-sm" v-for="co2Mod in buttons.co2Modifiers" :key="co2Mod.id">
               <button
                 type="button"
                 class="btn btn-lg btn-block"
                 :class="{
-                  'btn-warning': formData.transitionTo.humidity == humMod.id,
-                  'btn-outline-warning': formData.transitionTo.humidity != humMod.id
+                  'btn-warning': formData.co2 == co2Mod.id,
+                  'btn-outline-warning': formData.co2 != co2Mod.id
                 }"
-                @click="onClickTransitionModHum(humMod.id)"
-              >{{ humMod.title }}</button>
-            </div>
-          </div>
-        </div>
-
-        <div v-if="formData.transitionTo.severity >= 0">
-          <div class="row my-3">
-            <div class="col-sm text-center" v-for="co2Mod in buttons.co2Modifiers" :key="co2Mod.id">
-              <button
-                type="button"
-                class="btn btn-lg btn-block"
-                :class="{
-                  'btn-warning': formData.transitionTo.co2 == co2Mod.id,
-                  'btn-outline-warning': formData.transitionTo.co2 != co2Mod.id
-                }"
-                @click="onClickTransitionModCo2(co2Mod.id)"
+                @click="onClickCo2Modifier(co2Mod.id)"
               >{{ co2Mod.title }}</button>
             </div>
           </div>
 
+          <h3>VOC Modifier</h3>
           <div class="row my-3">
-            <div class="col-sm text-center" v-for="vocMod in buttons.vocModifiers" :key="vocMod.id">
+            <div class="col-sm" v-for="vocMod in buttons.vocModifiers" :key="vocMod.id">
               <button
                 type="button"
                 class="btn btn-lg btn-block"
                 :class="{
-                  'btn-warning': formData.transitionTo.voc == vocMod.id,
-                  'btn-outline-warning': formData.transitionTo.voc != vocMod.id
+                  'btn-warning': formData.voc == vocMod.id,
+                  'btn-outline-warning': formData.voc != vocMod.id
                 }"
-                @click="onClickTransitionModVoc(vocMod.id)"
+                @click="onClickVocModifier(vocMod.id)"
               >{{ vocMod.title }}</button>
             </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <div class="card my-4">
+        <div class="card-body text-center">
+          <h2 class="card-title">Future</h2>
+
+          <div class="row mt-3 mb-4">
+            <button
+              type="button"
+              class="btn btn-lg btn-block btn-dark"
+              @click="onClickProlong()"
+            >Prolong Current</button>
+          </div>
+
+          <div class="row my-3">
+            <button
+              type="button"
+              class="btn btn-lg btn-block"
+              :class="{
+                'btn-primary': formData.transitionTo.severity == -1,
+                'btn-outline-primary': formData.transitionTo.severity != -1
+              }"
+              @click="onClickTransitionTo(-1)"
+            >None</button>
+          </div>
+
+          <div class="row my-3">
+            <div class="col-sm text-center" v-for="roomType in buttons.roomTypes" :key="roomType.id">
+              <button
+                type="button"
+                class="btn btn-lg btn-block"
+                :class="{
+                  'btn-primary': formData.transitionTo.severity == roomType.id,
+                  'btn-outline-primary': formData.transitionTo.severity != roomType.id
+                }"
+                @click="onClickTransitionTo(roomType.id)"
+              >{{ roomType.title }}</button>
+            </div>
+          </div>
+
+          <div v-if="formData.transitionTo.severity >= 0">
+            <div class="row my-3">
+              <div class="col-sm text-center" v-for="duration in buttons.durations" :key="duration">
+                <button
+                  type="button"
+                  class="btn btn-lg btn-block"
+                  :class="{
+                    'btn-info': formData.transitionTo.duration == duration,
+                    'btn-outline-info': formData.transitionTo.duration != duration
+                  }"
+                  @click="onClickTransitionToDuration(duration)"
+                >{{ duration }}</button>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="formData.transitionTo.severity > 0">
+            <div class="row my-3">
+              <div class="col-sm text-center" v-for="tempMod in buttons.tempModifiers" :key="tempMod.id">
+                <button
+                  type="button"
+                  class="btn btn-lg btn-block"
+                  :class="{
+                    'btn-warning': formData.transitionTo.temperature == tempMod.id,
+                    'btn-outline-warning': formData.transitionTo.temperature != tempMod.id
+                  }"
+                  @click="onClickTransitionModTemp(tempMod.id)"
+                >{{ tempMod.title }}</button>
+              </div>
+            </div>
+
+            <div class="row my-3">
+              <div class="col-sm text-center" v-for="humMod in buttons.humModifiers" :key="humMod.id">
+                <button
+                  type="button"
+                  class="btn btn-lg btn-block"
+                  :class="{
+                    'btn-warning': formData.transitionTo.humidity == humMod.id,
+                    'btn-outline-warning': formData.transitionTo.humidity != humMod.id
+                  }"
+                  @click="onClickTransitionModHum(humMod.id)"
+                >{{ humMod.title }}</button>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="formData.transitionTo.severity >= 0">
+            <div class="row my-3">
+              <div class="col-sm text-center" v-for="co2Mod in buttons.co2Modifiers" :key="co2Mod.id">
+                <button
+                  type="button"
+                  class="btn btn-lg btn-block"
+                  :class="{
+                    'btn-warning': formData.transitionTo.co2 == co2Mod.id,
+                    'btn-outline-warning': formData.transitionTo.co2 != co2Mod.id
+                  }"
+                  @click="onClickTransitionModCo2(co2Mod.id)"
+                >{{ co2Mod.title }}</button>
+              </div>
+            </div>
+
+            <div class="row my-3">
+              <div class="col-sm text-center" v-for="vocMod in buttons.vocModifiers" :key="vocMod.id">
+                <button
+                  type="button"
+                  class="btn btn-lg btn-block"
+                  :class="{
+                    'btn-warning': formData.transitionTo.voc == vocMod.id,
+                    'btn-outline-warning': formData.transitionTo.voc != vocMod.id
+                  }"
+                  @click="onClickTransitionModVoc(vocMod.id)"
+                >{{ vocMod.title }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-danger btn-lg btn-block font-weight-bold mb-5">
+        E X E C U T E
+      </button>
+    </form>
   </div>
 </template>
 
@@ -329,6 +341,18 @@ export default {
     onClickHumidityModifier(id) {
       var cId = this.clamp(id, 0, this.buttons.humModifiers.length - 1);
       this.formData.humidity = cId;
+    },
+
+    onClickProlong() {
+      this.formData.transitionTo.co2 = this.formData.co2;
+      this.formData.transitionTo.humidity = this.formData.humidity;
+      this.formData.transitionTo.severity = this.formData.severity;
+      this.formData.transitionTo.temperature = this.formData.temperature;
+      this.formData.transitionTo.voc = this.formData.voc;
+
+      if (this.formData.duration > this.formData.transitionTo.duration) {
+        this.formData.transitionTo.duration = this.formData.duration;
+      }
     },
 
     onClickRoomType(id) {

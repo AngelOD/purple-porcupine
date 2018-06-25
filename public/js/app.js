@@ -47234,7 +47234,7 @@ exports = module.exports = __webpack_require__(42)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -47933,6 +47933,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'vue-world-domination',
@@ -48006,6 +48018,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     onClickHumidityModifier: function onClickHumidityModifier(id) {
       var cId = this.clamp(id, 0, this.buttons.humModifiers.length - 1);
       this.formData.humidity = cId;
+    },
+    onClickProlong: function onClickProlong() {
+      this.formData.transitionTo.co2 = this.formData.co2;
+      this.formData.transitionTo.humidity = this.formData.humidity;
+      this.formData.transitionTo.severity = this.formData.severity;
+      this.formData.transitionTo.temperature = this.formData.temperature;
+      this.formData.transitionTo.voc = this.formData.voc;
+
+      if (this.formData.duration > this.formData.transitionTo.duration) {
+        this.formData.transitionTo.duration = this.formData.duration;
+      }
     },
     onClickRoomType: function onClickRoomType(id) {
       var cId = this.clamp(id, 0, this.buttons.roomTypes.length - 1);
@@ -48130,419 +48153,454 @@ var render = function() {
           attrs: { type: "submit" }
         },
         [_vm._v("\n      E X E C U T E\n    ")]
-      )
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-body text-center" }, [
-        _c("h2", { staticClass: "card-title" }, [_vm._v("Past and current")]),
-        _vm._v(" "),
-        _c("h3", [_vm._v("Room Type")]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "row my-3" },
-          _vm._l(_vm.buttons.roomTypes, function(room) {
-            return _c("div", { key: room.id, staticClass: "col-sm" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-lg btn-block",
-                  class: {
-                    "btn-primary": _vm.formData.severity == room.id,
-                    "btn-outline-primary": _vm.formData.severity != room.id
-                  },
-                  attrs: { type: "button" },
-                  on: {
-                    click: function($event) {
-                      _vm.onClickRoomType(room.id)
-                    }
-                  }
-                },
-                [_vm._v(_vm._s(room.title))]
-              )
-            ])
-          })
-        ),
-        _vm._v(" "),
-        _c("h3", [_vm._v("Duration (minutes)")]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "row my-3" },
-          _vm._l(_vm.buttons.durations, function(duration) {
-            return _c("div", { key: duration, staticClass: "col-sm" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-lg btn-block",
-                  class: {
-                    "btn-info": _vm.formData.duration == duration,
-                    "btn-outline-info": _vm.formData.duration != duration
-                  },
-                  attrs: { type: "button" },
-                  on: {
-                    click: function($event) {
-                      _vm.onClickDuration(duration)
-                    }
-                  }
-                },
-                [_vm._v(_vm._s(duration))]
-              )
-            ])
-          })
-        ),
-        _vm._v(" "),
-        _vm.formData.severity > 0
-          ? _c("div", [
-              _c("h3", [_vm._v("Temperature Modifier")]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "row my-3" },
-                _vm._l(_vm.buttons.tempModifiers, function(tempMod) {
-                  return _c("div", { key: tempMod.id, staticClass: "col-sm" }, [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-lg btn-block",
-                        class: {
-                          "btn-warning": _vm.formData.temperature == tempMod.id,
-                          "btn-outline-warning":
-                            _vm.formData.temperature != tempMod.id
-                        },
-                        attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            _vm.onClickTemperatureModifier(tempMod.id)
-                          }
-                        }
-                      },
-                      [_vm._v(_vm._s(tempMod.title))]
-                    )
-                  ])
-                })
-              ),
-              _vm._v(" "),
-              _c("h3", [_vm._v("Humidity Modifier")]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "row my-3" },
-                _vm._l(_vm.buttons.humModifiers, function(humMod) {
-                  return _c("div", { key: humMod.id, staticClass: "col-sm" }, [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-lg btn-block",
-                        class: {
-                          "btn-warning": _vm.formData.humidity == humMod.id,
-                          "btn-outline-warning":
-                            _vm.formData.humidity != humMod.id
-                        },
-                        attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            _vm.onClickHumidityModifier(humMod.id)
-                          }
-                        }
-                      },
-                      [_vm._v(_vm._s(humMod.title))]
-                    )
-                  ])
-                })
-              )
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm._m(1),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "row my-3" },
-          _vm._l(_vm.buttons.co2Modifiers, function(co2Mod) {
-            return _c("div", { key: co2Mod.id, staticClass: "col-sm" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-lg btn-block",
-                  class: {
-                    "btn-warning": _vm.formData.co2 == co2Mod.id,
-                    "btn-outline-warning": _vm.formData.co2 != co2Mod.id
-                  },
-                  attrs: { type: "button" },
-                  on: {
-                    click: function($event) {
-                      _vm.onClickCo2Modifier(co2Mod.id)
-                    }
-                  }
-                },
-                [_vm._v(_vm._s(co2Mod.title))]
-              )
-            ])
-          })
-        ),
-        _vm._v(" "),
-        _c("h3", [_vm._v("VOC Modifier")]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "row my-3" },
-          _vm._l(_vm.buttons.vocModifiers, function(vocMod) {
-            return _c("div", { key: vocMod.id, staticClass: "col-sm" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-lg btn-block",
-                  class: {
-                    "btn-warning": _vm.formData.voc == vocMod.id,
-                    "btn-outline-warning": _vm.formData.voc != vocMod.id
-                  },
-                  attrs: { type: "button" },
-                  on: {
-                    click: function($event) {
-                      _vm.onClickVocModifier(vocMod.id)
-                    }
-                  }
-                },
-                [_vm._v(_vm._s(vocMod.title))]
-              )
-            ])
-          })
-        )
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "card my-4" }, [
-      _c("div", { staticClass: "card-body text-center" }, [
-        _c("h2", { staticClass: "card-title" }, [_vm._v("Future")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "row my-3" }, [
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "card" }, [
+        _c("div", { staticClass: "card-body text-center" }, [
+          _c("h2", { staticClass: "card-title" }, [_vm._v("Past and current")]),
+          _vm._v(" "),
+          _c("h3", [_vm._v("Room Type")]),
+          _vm._v(" "),
           _c(
-            "button",
-            {
-              staticClass: "btn btn-lg btn-block",
-              class: {
-                "btn-primary": _vm.formData.transitionTo.severity == -1,
-                "btn-outline-primary": _vm.formData.transitionTo.severity != -1
-              },
-              attrs: { type: "button" },
-              on: {
-                click: function($event) {
-                  _vm.onClickTransitionTo(-1)
-                }
-              }
-            },
-            [_vm._v("None")]
-          )
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "row my-3" },
-          _vm._l(_vm.buttons.roomTypes, function(roomType) {
-            return _c(
-              "div",
-              { key: roomType.id, staticClass: "col-sm text-center" },
-              [
+            "div",
+            { staticClass: "row my-3" },
+            _vm._l(_vm.buttons.roomTypes, function(room) {
+              return _c("div", { key: room.id, staticClass: "col-sm" }, [
                 _c(
                   "button",
                   {
                     staticClass: "btn btn-lg btn-block",
                     class: {
-                      "btn-primary":
-                        _vm.formData.transitionTo.severity == roomType.id,
-                      "btn-outline-primary":
-                        _vm.formData.transitionTo.severity != roomType.id
+                      "btn-primary": _vm.formData.severity == room.id,
+                      "btn-outline-primary": _vm.formData.severity != room.id
                     },
                     attrs: { type: "button" },
                     on: {
                       click: function($event) {
-                        _vm.onClickTransitionTo(roomType.id)
+                        _vm.onClickRoomType(room.id)
                       }
                     }
                   },
-                  [_vm._v(_vm._s(roomType.title))]
+                  [_vm._v(_vm._s(room.title))]
                 )
-              ]
+              ])
+            })
+          ),
+          _vm._v(" "),
+          _c("h3", [_vm._v("Duration (minutes)")]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "row my-3" },
+            _vm._l(_vm.buttons.durations, function(duration) {
+              return _c("div", { key: duration, staticClass: "col-sm" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-lg btn-block",
+                    class: {
+                      "btn-info": _vm.formData.duration == duration,
+                      "btn-outline-info": _vm.formData.duration != duration
+                    },
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        _vm.onClickDuration(duration)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(duration))]
+                )
+              ])
+            })
+          ),
+          _vm._v(" "),
+          _vm.formData.severity > 0
+            ? _c("div", [
+                _c("h3", [_vm._v("Temperature Modifier")]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "row my-3" },
+                  _vm._l(_vm.buttons.tempModifiers, function(tempMod) {
+                    return _c(
+                      "div",
+                      { key: tempMod.id, staticClass: "col-sm" },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-lg btn-block",
+                            class: {
+                              "btn-warning":
+                                _vm.formData.temperature == tempMod.id,
+                              "btn-outline-warning":
+                                _vm.formData.temperature != tempMod.id
+                            },
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                _vm.onClickTemperatureModifier(tempMod.id)
+                              }
+                            }
+                          },
+                          [_vm._v(_vm._s(tempMod.title))]
+                        )
+                      ]
+                    )
+                  })
+                ),
+                _vm._v(" "),
+                _c("h3", [_vm._v("Humidity Modifier")]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "row my-3" },
+                  _vm._l(_vm.buttons.humModifiers, function(humMod) {
+                    return _c(
+                      "div",
+                      { key: humMod.id, staticClass: "col-sm" },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-lg btn-block",
+                            class: {
+                              "btn-warning": _vm.formData.humidity == humMod.id,
+                              "btn-outline-warning":
+                                _vm.formData.humidity != humMod.id
+                            },
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                _vm.onClickHumidityModifier(humMod.id)
+                              }
+                            }
+                          },
+                          [_vm._v(_vm._s(humMod.title))]
+                        )
+                      ]
+                    )
+                  })
+                )
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm._m(1),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "row my-3" },
+            _vm._l(_vm.buttons.co2Modifiers, function(co2Mod) {
+              return _c("div", { key: co2Mod.id, staticClass: "col-sm" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-lg btn-block",
+                    class: {
+                      "btn-warning": _vm.formData.co2 == co2Mod.id,
+                      "btn-outline-warning": _vm.formData.co2 != co2Mod.id
+                    },
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        _vm.onClickCo2Modifier(co2Mod.id)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(co2Mod.title))]
+                )
+              ])
+            })
+          ),
+          _vm._v(" "),
+          _c("h3", [_vm._v("VOC Modifier")]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "row my-3" },
+            _vm._l(_vm.buttons.vocModifiers, function(vocMod) {
+              return _c("div", { key: vocMod.id, staticClass: "col-sm" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-lg btn-block",
+                    class: {
+                      "btn-warning": _vm.formData.voc == vocMod.id,
+                      "btn-outline-warning": _vm.formData.voc != vocMod.id
+                    },
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        _vm.onClickVocModifier(vocMod.id)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(vocMod.title))]
+                )
+              ])
+            })
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card my-4" }, [
+        _c("div", { staticClass: "card-body text-center" }, [
+          _c("h2", { staticClass: "card-title" }, [_vm._v("Future")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "row mt-3 mb-4" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-lg btn-block btn-dark",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    _vm.onClickProlong()
+                  }
+                }
+              },
+              [_vm._v("Prolong Current")]
             )
-          })
-        ),
-        _vm._v(" "),
-        _vm.formData.transitionTo.severity >= 0
-          ? _c("div", [
-              _c(
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "row my-3" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-lg btn-block",
+                class: {
+                  "btn-primary": _vm.formData.transitionTo.severity == -1,
+                  "btn-outline-primary":
+                    _vm.formData.transitionTo.severity != -1
+                },
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    _vm.onClickTransitionTo(-1)
+                  }
+                }
+              },
+              [_vm._v("None")]
+            )
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "row my-3" },
+            _vm._l(_vm.buttons.roomTypes, function(roomType) {
+              return _c(
                 "div",
-                { staticClass: "row my-3" },
-                _vm._l(_vm.buttons.durations, function(duration) {
-                  return _c(
-                    "div",
-                    { key: duration, staticClass: "col-sm text-center" },
-                    [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-lg btn-block",
-                          class: {
-                            "btn-info":
-                              _vm.formData.transitionTo.duration == duration,
-                            "btn-outline-info":
-                              _vm.formData.transitionTo.duration != duration
-                          },
-                          attrs: { type: "button" },
-                          on: {
-                            click: function($event) {
-                              _vm.onClickTransitionToDuration(duration)
-                            }
-                          }
-                        },
-                        [_vm._v(_vm._s(duration))]
-                      )
-                    ]
+                { key: roomType.id, staticClass: "col-sm text-center" },
+                [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-lg btn-block",
+                      class: {
+                        "btn-primary":
+                          _vm.formData.transitionTo.severity == roomType.id,
+                        "btn-outline-primary":
+                          _vm.formData.transitionTo.severity != roomType.id
+                      },
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          _vm.onClickTransitionTo(roomType.id)
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(roomType.title))]
                   )
-                })
+                ]
               )
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.formData.transitionTo.severity > 0
-          ? _c("div", [
-              _c(
-                "div",
-                { staticClass: "row my-3" },
-                _vm._l(_vm.buttons.tempModifiers, function(tempMod) {
-                  return _c(
-                    "div",
-                    { key: tempMod.id, staticClass: "col-sm text-center" },
-                    [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-lg btn-block",
-                          class: {
-                            "btn-warning":
-                              _vm.formData.transitionTo.temperature ==
-                              tempMod.id,
-                            "btn-outline-warning":
-                              _vm.formData.transitionTo.temperature !=
-                              tempMod.id
-                          },
-                          attrs: { type: "button" },
-                          on: {
-                            click: function($event) {
-                              _vm.onClickTransitionModTemp(tempMod.id)
+            })
+          ),
+          _vm._v(" "),
+          _vm.formData.transitionTo.severity >= 0
+            ? _c("div", [
+                _c(
+                  "div",
+                  { staticClass: "row my-3" },
+                  _vm._l(_vm.buttons.durations, function(duration) {
+                    return _c(
+                      "div",
+                      { key: duration, staticClass: "col-sm text-center" },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-lg btn-block",
+                            class: {
+                              "btn-info":
+                                _vm.formData.transitionTo.duration == duration,
+                              "btn-outline-info":
+                                _vm.formData.transitionTo.duration != duration
+                            },
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                _vm.onClickTransitionToDuration(duration)
+                              }
                             }
-                          }
-                        },
-                        [_vm._v(_vm._s(tempMod.title))]
-                      )
-                    ]
-                  )
-                })
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "row my-3" },
-                _vm._l(_vm.buttons.humModifiers, function(humMod) {
-                  return _c(
-                    "div",
-                    { key: humMod.id, staticClass: "col-sm text-center" },
-                    [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-lg btn-block",
-                          class: {
-                            "btn-warning":
-                              _vm.formData.transitionTo.humidity == humMod.id,
-                            "btn-outline-warning":
-                              _vm.formData.transitionTo.humidity != humMod.id
                           },
-                          attrs: { type: "button" },
-                          on: {
-                            click: function($event) {
-                              _vm.onClickTransitionModHum(humMod.id)
+                          [_vm._v(_vm._s(duration))]
+                        )
+                      ]
+                    )
+                  })
+                )
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.formData.transitionTo.severity > 0
+            ? _c("div", [
+                _c(
+                  "div",
+                  { staticClass: "row my-3" },
+                  _vm._l(_vm.buttons.tempModifiers, function(tempMod) {
+                    return _c(
+                      "div",
+                      { key: tempMod.id, staticClass: "col-sm text-center" },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-lg btn-block",
+                            class: {
+                              "btn-warning":
+                                _vm.formData.transitionTo.temperature ==
+                                tempMod.id,
+                              "btn-outline-warning":
+                                _vm.formData.transitionTo.temperature !=
+                                tempMod.id
+                            },
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                _vm.onClickTransitionModTemp(tempMod.id)
+                              }
                             }
-                          }
-                        },
-                        [_vm._v(_vm._s(humMod.title))]
-                      )
-                    ]
-                  )
-                })
-              )
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.formData.transitionTo.severity >= 0
-          ? _c("div", [
-              _c(
-                "div",
-                { staticClass: "row my-3" },
-                _vm._l(_vm.buttons.co2Modifiers, function(co2Mod) {
-                  return _c(
-                    "div",
-                    { key: co2Mod.id, staticClass: "col-sm text-center" },
-                    [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-lg btn-block",
-                          class: {
-                            "btn-warning":
-                              _vm.formData.transitionTo.co2 == co2Mod.id,
-                            "btn-outline-warning":
-                              _vm.formData.transitionTo.co2 != co2Mod.id
                           },
-                          attrs: { type: "button" },
-                          on: {
-                            click: function($event) {
-                              _vm.onClickTransitionModCo2(co2Mod.id)
+                          [_vm._v(_vm._s(tempMod.title))]
+                        )
+                      ]
+                    )
+                  })
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "row my-3" },
+                  _vm._l(_vm.buttons.humModifiers, function(humMod) {
+                    return _c(
+                      "div",
+                      { key: humMod.id, staticClass: "col-sm text-center" },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-lg btn-block",
+                            class: {
+                              "btn-warning":
+                                _vm.formData.transitionTo.humidity == humMod.id,
+                              "btn-outline-warning":
+                                _vm.formData.transitionTo.humidity != humMod.id
+                            },
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                _vm.onClickTransitionModHum(humMod.id)
+                              }
                             }
-                          }
-                        },
-                        [_vm._v(_vm._s(co2Mod.title))]
-                      )
-                    ]
-                  )
-                })
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "row my-3" },
-                _vm._l(_vm.buttons.vocModifiers, function(vocMod) {
-                  return _c(
-                    "div",
-                    { key: vocMod.id, staticClass: "col-sm text-center" },
-                    [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-lg btn-block",
-                          class: {
-                            "btn-warning":
-                              _vm.formData.transitionTo.voc == vocMod.id,
-                            "btn-outline-warning":
-                              _vm.formData.transitionTo.voc != vocMod.id
                           },
-                          attrs: { type: "button" },
-                          on: {
-                            click: function($event) {
-                              _vm.onClickTransitionModVoc(vocMod.id)
+                          [_vm._v(_vm._s(humMod.title))]
+                        )
+                      ]
+                    )
+                  })
+                )
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.formData.transitionTo.severity >= 0
+            ? _c("div", [
+                _c(
+                  "div",
+                  { staticClass: "row my-3" },
+                  _vm._l(_vm.buttons.co2Modifiers, function(co2Mod) {
+                    return _c(
+                      "div",
+                      { key: co2Mod.id, staticClass: "col-sm text-center" },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-lg btn-block",
+                            class: {
+                              "btn-warning":
+                                _vm.formData.transitionTo.co2 == co2Mod.id,
+                              "btn-outline-warning":
+                                _vm.formData.transitionTo.co2 != co2Mod.id
+                            },
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                _vm.onClickTransitionModCo2(co2Mod.id)
+                              }
                             }
-                          }
-                        },
-                        [_vm._v(_vm._s(vocMod.title))]
-                      )
-                    ]
-                  )
-                })
-              )
-            ])
-          : _vm._e()
-      ])
+                          },
+                          [_vm._v(_vm._s(co2Mod.title))]
+                        )
+                      ]
+                    )
+                  })
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "row my-3" },
+                  _vm._l(_vm.buttons.vocModifiers, function(vocMod) {
+                    return _c(
+                      "div",
+                      { key: vocMod.id, staticClass: "col-sm text-center" },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-lg btn-block",
+                            class: {
+                              "btn-warning":
+                                _vm.formData.transitionTo.voc == vocMod.id,
+                              "btn-outline-warning":
+                                _vm.formData.transitionTo.voc != vocMod.id
+                            },
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                _vm.onClickTransitionModVoc(vocMod.id)
+                              }
+                            }
+                          },
+                          [_vm._v(_vm._s(vocMod.title))]
+                        )
+                      ]
+                    )
+                  })
+                )
+              ])
+            : _vm._e()
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-danger btn-lg btn-block font-weight-bold mb-5",
+          attrs: { type: "submit" }
+        },
+        [_vm._v("\n      E X E C U T E\n    ")]
+      )
     ])
   ])
 }

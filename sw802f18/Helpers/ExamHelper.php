@@ -141,21 +141,22 @@ class ExamHelper
      */
     protected static function setupRoom($data, $isFuture = false, $minutes = 60)
     {
-        $room = ($isFuture ? self::getRoom() : self::clearRoomSensorData());
+        $room = ($isFuture ? self::clearRecentRoomSensorData() : self::clearRoomSensorData());
         $now = Carbon::now();
-        $maxCount = $minutes;
         $origData = $data;
         $dbData = self::getLatestSensorData();
         $loopCount = 1;
 
         if ($isFuture) {
             $data = self::calculateNewData($dbData, $origData, $loopCount);
+            $now->subMinutes(20);
+            $minutes += 20;
+        } else {
+            $now->addMinute();
         }
 
-        if (!$isFuture) { $now->addMinute(); }
-
         $points = [];
-        for ($i = 0; $i < $maxCount; $i++) {
+        for ($i = 0; $i < $minutes; $i++) {
             if ($isFuture) {
                 $now->addMinute();
             } else {
@@ -213,6 +214,23 @@ class ExamHelper
         $sc = $room->sensorClusters[0];
 
         $q = 'DELETE FROM "radio_datas" WHERE "node_mac_address" = \'' . $sc->node_mac_address . '\'';
+        InfluxDB::query($q);
+
+        return $room;
+    }
+
+    /**
+     *
+     */
+    protected static function clearRecentRoomSensorData()
+    {
+        $room = self::getRoom();
+        $sc = $room->sensorClusters[0];
+        $dt = Carbon::now()->subMinutes(20);
+
+        $q = 'DELETE FROM "radio_datas" '
+            .'WHERE "node_mac_address" = \'' . $sc->node_mac_address . '\''
+            .' AND "time" >= ' . TimeHelper::carbonToNanoTime($dt);
         InfluxDB::query($q);
 
         return $room;
